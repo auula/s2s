@@ -34,10 +34,15 @@ type Columns interface {
 
 type DataBase interface {
 	Connect() error
-	SetInfo()
+	SetInfo(info *DBInfo)
 }
 
 type DBInfo struct {
+	HostIPAndPort string
+	UserName      string
+	Password      string
+	Charset       string
+	DBType        string
 }
 
 type Agrs struct{}
