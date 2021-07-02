@@ -53,3 +53,27 @@ func (db *DB) Connect() error {
 func (db *DB) SetInfo(info *core.DBInfo) {
 	db.info = info
 }
+
+func (db *DB) Columns(dbName, tableName string) ([]*core.TableColumn, error) {
+	rows, err := db.source.Query(core.QuerySQL, dbName, tableName)
+	if err != nil {
+		return nil, err
+	}
+	if rows == nil {
+		return nil, errors.New("no data")
+	}
+	defer rows.Close()
+
+	var columns []*core.TableColumn
+	for rows.Next() {
+		var column core.TableColumn
+		err := rows.Scan(&column.ColumnName, &column.ColumnType, &column.ColumnKey, &column.IsNullable, &column.ColumnType, &column.ColumnComment)
+		if err != nil {
+			return nil, err
+		}
+
+		columns = append(columns, &column)
+	}
+
+	return columns, nil
+}

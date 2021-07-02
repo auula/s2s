@@ -20,6 +20,9 @@ package core
 
 const (
 	DataSourceFormat = "%s:%s@tcp(%s)/information_schema?charset=%s&parseTime=True&loc=Local"
+	QuerySQL         = "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_KEY, " +
+		"IS_NULLABLE, COLUMN_TYPE, COLUMN_COMMENT " +
+		"FROM COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? "
 )
 
 // 结构体解析接口
