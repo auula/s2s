@@ -18,6 +18,10 @@ THE SOFTWARE.
 */
 package core
 
+const (
+	DataSourceFormat = "%s:%s@tcp(%s)/information_schema?charset=%s&parseTime=True&loc=Local"
+)
+
 // 结构体解析接口
 type Assembly interface {
 	AssemblyColumns(tc []*TableColumn) []Columns

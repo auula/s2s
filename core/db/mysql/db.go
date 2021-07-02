@@ -17,3 +17,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 package mysql
+
+import (
+	"database/sql"
+	"errors"
+	"fmt"
+
+	"github.com/higker/s2s/core"
+)
+
+type DB struct {
+	source *sql.DB
+	info   *core.DBInfo
+}
+
+func (db *DB) New() core.DataBase {
+	return new(DB)
+}
+
+func (db *DB) Connect() error {
+	var err error
+	if db.info == nil {
+		return errors.New("database info is empty")
+	}
+	dsn := fmt.Sprintf(core.DataSourceFormat,
+		db.info.UserName,
+		db.info.Password,
+		db.info.HostIPAndPort,
+		db.info.Charset,
+	)
+	db.source, err = sql.Open(db.info.DBType, dsn)
+	return err
+}
+
+func (db *DB) SetInfo(info *core.DBInfo) {
+	db.info = info
+}
