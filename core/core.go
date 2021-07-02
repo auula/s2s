@@ -18,6 +18,29 @@ THE SOFTWARE.
 */
 package core
 
+// 结构体解析接口
+type Assembly interface {
+	AssemblyColumns(tc []*TableColumn) []*Columns
+	Parse(tabName string, cs []*Columns) error
+}
+
+// 抽象的结构体接口
+type Columns interface {
+	Tag() string
+	Name() string
+	Type() string
+	Comment() string
+}
+
+type TableColumn struct {
+	ColumnName    string
+	DataType      string
+	IsNullable    string
+	ColumnKey     string
+	ColumnType    string
+	ColumnComment string
+}
+
 type WebServer struct {
 }
 
