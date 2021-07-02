@@ -20,8 +20,8 @@ package core
 
 // 结构体解析接口
 type Assembly interface {
-	AssemblyColumns(tc []*TableColumn) []*Columns
-	Parse(tabName string, cs []*Columns) error
+	AssemblyColumns(tc []*TableColumn) []Columns
+	Parse(tabName string, cs []Columns) error
 }
 
 // 抽象的结构体接口
@@ -31,6 +31,16 @@ type Columns interface {
 	Type() string
 	Comment() string
 }
+
+type DataBase interface {
+	Connect() error
+	SetInfo()
+}
+
+type DBInfo struct {
+}
+
+type Agrs struct{}
 
 type TableColumn struct {
 	ColumnName    string
