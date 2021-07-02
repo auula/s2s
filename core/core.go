@@ -57,6 +57,7 @@ type TableColumn struct {
 }
 
 type WebServer struct {
+	Port string
 }
 
 type Console struct {
