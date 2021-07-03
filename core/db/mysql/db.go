@@ -50,7 +50,7 @@ func (db *DB) Connect() error {
 		db.info.HostIPAndPort,
 		db.info.Charset,
 	)
-	db.source, err = sql.Open(db.info.DBType, dsn)
+	db.source, err = sql.Open("mysql", dsn)
 	return err
 }
 
