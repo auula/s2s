@@ -37,7 +37,7 @@ var consoleCmd = &cobra.Command{
 
 		structer := golang.New()
 
-		if err := structer.Open(
+		if err := structer.OpenDB(
 			&core.DBInfo{
 				HostIPAndPort: "45.76.202.255:3306",
 				UserName:      "emp_db",

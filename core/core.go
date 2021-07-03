@@ -97,7 +97,7 @@ type Structer struct {
 	db       DataBase
 }
 
-func (s *Structer) Open(info *DBInfo) error {
+func (s *Structer) OpenDB(info *DBInfo) error {
 
 	if info == nil {
 		return errors.New("database info is empty")
