@@ -18,7 +18,12 @@ THE SOFTWARE.
 */
 package core
 
+type Languages int8
+
 const (
+	Java Languages = iota
+	Rust
+	Golang
 	DataSourceFormat = "%s:%s@tcp(%s)/information_schema?charset=%s&parseTime=True&loc=Local"
 	QuerySQL         = "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_KEY, " +
 		"IS_NULLABLE, COLUMN_TYPE, COLUMN_COMMENT " +
@@ -27,7 +32,7 @@ const (
 
 // 结构体解析接口
 type Assembly interface {
-	AssemblyColumns(tc []*TableColumn) []Columns
+	Columns(tc []*TableColumn) []Columns
 	Parse(tabName string, cs []Columns) error
 }
 
@@ -63,9 +68,15 @@ type TableColumn struct {
 	ColumnComment string
 }
 
+type DataType struct {
+	Table map[string]string
+	Lang  Languages
+}
 type WebServer struct {
 	Port string
 }
 
-type Console struct {
+type Structer struct {
+	Assembly Assembly
+	DB       DataBase
 }

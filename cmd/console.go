@@ -16,23 +16,42 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"log"
 
+	"github.com/higker/s2s/core"
+	"github.com/higker/s2s/core/lang/golang"
 	"github.com/spf13/cobra"
+)
+
+var (
+	mode          string
+	comoandSymbol = "😃:shell>"
 )
 
 // consoleCmd represents the console command
 var consoleCmd = &cobra.Command{
 	Use:   "console",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Console interaction",
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("console called")
+
+		structer := golang.New()
+		structer.DB.SetInfo(
+			&core.DBInfo{
+				HostIPAndPort: "45.76.202.255:3306",
+				UserName:      "emp_db",
+				Password:      "TsTkHXDK4xPFtCph",
+				DBType:        "mysql",
+				Charset:       "utf8",
+			},
+		)
+
+		if err := structer.DB.Connect(); err != nil {
+			log.Println(err)
+		}
+
+		columns := structer.Assembly.Columns(nil)
+		structer.Assembly.Parse("", columns)
 	},
 }
 

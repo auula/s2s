@@ -31,7 +31,7 @@ type DB struct {
 	info   *core.DBInfo
 }
 
-func (db *DB) New() core.DataBase {
+func New() core.DataBase {
 	return new(DB)
 }
 
