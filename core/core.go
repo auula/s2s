@@ -44,23 +44,36 @@ const (
 
 // 结构体解析接口
 type Assembly interface {
-	Columns(tc []*TableColumn) []Columns
-	Parse(tabName string, cs []Columns) error
+	Parse(tabName string, cs []Field) error
+	ToField(tcs []*TableColumn) []Field
 }
 
-// 抽象的结构体接口
-type Columns interface {
-	Tag() string
+// 抽象的结构体Field接口
+type Field interface {
 	Name() string
 	Type() string
 	Comment() string
 }
 
 type DataBase interface {
+	Type() DBType
+	Close() error
 	Connect() error
 	SetInfo(info *DBInfo)
-	Close() error
-	Type() DBType
+	GetColumns(dbName, tabName string) ([]*TableColumn, error)
+}
+
+type DataType struct {
+	Table map[string]string
+	Lang  Languages
+}
+type WebServer struct {
+	Port string
+}
+
+type Structure struct {
+	assembly Assembly
+	db       DataBase
 }
 
 type DBInfo struct {
@@ -82,20 +95,19 @@ type TableColumn struct {
 	ColumnComment string
 }
 
-type DataType struct {
-	Table map[string]string
-	Lang  Languages
-}
-type WebServer struct {
-	Port string
+func (t *TableColumn) Name() string {
+	return t.ColumnName
 }
 
-type Structer struct {
-	assembly Assembly
-	db       DataBase
+func (t *TableColumn) Type() string {
+	return t.ColumnType
 }
 
-func (s *Structer) OpenDB(info *DBInfo) error {
+func (t *TableColumn) Comment() string {
+	return t.ColumnComment
+}
+
+func (s *Structure) OpenDB(info *DBInfo) error {
 
 	switch info.Type {
 	case MySQL:
@@ -109,18 +121,18 @@ func (s *Structer) OpenDB(info *DBInfo) error {
 	return s.db.Connect()
 }
 
-func (s *Structer) Close() error {
+func (s *Structure) Close() error {
 	return s.db.Close()
 }
 
-func (s *Structer) SetLang(ass Assembly) {
+func (s *Structure) SetLang(ass Assembly) {
 	s.assembly = ass
 }
 
-func (s *Structer) Columns(tc []*TableColumn) []Columns {
-	return s.assembly.Columns(tc)
-}
-
-func (s *Structer) Parse(tabName string, cs []Columns) error {
-	return s.assembly.Parse(tabName, cs)
+func (s *Structure) Parse(dbName, tabName string) error {
+	columns, err := s.db.GetColumns(dbName, tabName)
+	if err != nil {
+		return err
+	}
+	return s.assembly.Parse(tabName, s.assembly.ToField(columns))
 }

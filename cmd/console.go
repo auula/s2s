@@ -35,9 +35,9 @@ var consoleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		structer := golang.New()
+		structure := golang.New()
 
-		if err := structer.OpenDB(
+		if err := structure.OpenDB(
 			&core.DBInfo{
 				HostIPAndPort: "45.76.202.255:3306",
 				UserName:      "emp_db",
@@ -49,10 +49,9 @@ var consoleCmd = &cobra.Command{
 			log.Println(err)
 		}
 
-		defer structer.Close()
+		defer structure.Close()
 
-		columns := structer.Columns(nil)
-		structer.Parse("", columns)
+		structure.Parse("", "")
 	},
 }
 

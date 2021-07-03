@@ -62,7 +62,7 @@ func (db *DB) Close() error {
 	return db.source.Close()
 }
 
-func (db *DB) Columns(dbName, tableName string) ([]*core.TableColumn, error) {
+func (db *DB) GetColumns(dbName, tableName string) ([]*core.TableColumn, error) {
 	rows, err := db.source.Query(core.QuerySQL, dbName, tableName)
 	if err != nil {
 		return nil, err

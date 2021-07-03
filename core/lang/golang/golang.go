@@ -20,7 +20,6 @@ package golang
 
 import (
 	"github.com/higker/s2s/core"
-	"github.com/higker/s2s/core/db/mysql"
 )
 
 type Assembly struct {
@@ -28,11 +27,11 @@ type Assembly struct {
 	structTpl string
 }
 
-func (goas *Assembly) Columns(tc []*core.TableColumn) []core.Columns {
+func (goas *Assembly) ToField(tcs []*core.TableColumn) []core.Field {
 	return nil
 }
 
-func (goas *Assembly) Parse(tabName string, cs []core.Columns) error {
+func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
 	return nil
 }
 
@@ -69,9 +68,8 @@ func NewAssembly() *Assembly {
 	}
 	return &goas
 }
-
-func New() (sts *core.Structer) {
+func New() *core.Structure {
+	sts := new(core.Structure)
 	sts.SetLang(NewAssembly())
-	sts.DB = mysql.New()
-	return
+	return sts
 }
