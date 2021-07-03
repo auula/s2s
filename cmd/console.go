@@ -49,6 +49,8 @@ var consoleCmd = &cobra.Command{
 			log.Println(err)
 		}
 
+		defer structer.Close()
+
 		columns := structer.Columns(nil)
 		structer.Parse("", columns)
 	},
