@@ -35,6 +35,10 @@ func New() core.DataBase {
 	return new(DB)
 }
 
+func (db *DB) Type() core.DBType {
+	return db.info.Type
+}
+
 func (db *DB) Connect() error {
 	var err error
 	if db.info == nil {

@@ -71,7 +71,7 @@ func NewAssembly() *Assembly {
 }
 
 func New() (sts *core.Structer) {
-	sts.Assembly = NewAssembly()
+	sts.SetLang(NewAssembly())
 	sts.DB = mysql.New()
 	return
 }
