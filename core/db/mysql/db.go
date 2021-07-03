@@ -54,6 +54,10 @@ func (db *DB) SetInfo(info *core.DBInfo) {
 	db.info = info
 }
 
+func (db *DB) Close() error {
+	return db.source.Close()
+}
+
 func (db *DB) Columns(dbName, tableName string) ([]*core.TableColumn, error) {
 	rows, err := db.source.Query(core.QuerySQL, dbName, tableName)
 	if err != nil {

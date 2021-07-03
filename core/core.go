@@ -18,6 +18,10 @@ THE SOFTWARE.
 */
 package core
 
+import (
+	"errors"
+)
+
 type Languages int8
 
 const (
@@ -47,6 +51,7 @@ type Columns interface {
 type DataBase interface {
 	Connect() error
 	SetInfo(info *DBInfo)
+	Close() error
 }
 
 type DBInfo struct {
@@ -77,6 +82,18 @@ type WebServer struct {
 }
 
 type Structer struct {
-	Assembly Assembly
-	DB       DataBase
+	assembly Assembly
+	db       DataBase
+}
+
+func (s *Structer) Open(info *DBInfo) error {
+	if info == nil {
+		return errors.New("database info is empty")
+	}
+	s.db.SetInfo(info)
+	return s.db.Connect()
+}
+
+func (s *Structer) Close() error {
+	return s.db.Close()
 }
