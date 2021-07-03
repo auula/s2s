@@ -26,7 +26,7 @@ import (
 
 type (
 	Languages int8
-	DBType int8
+	DBType    int8
 )
 
 const (
@@ -37,7 +37,7 @@ const (
 
 const (
 	MySQL DBType = iota
-	PostgreSQL 	
+	PostgreSQL
 	DataSourceFormat = "%s:%s@tcp(%s)/information_schema?charset=%s&parseTime=True&loc=Local"
 	QuerySQL         = "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_KEY, " +
 		"IS_NULLABLE, COLUMN_TYPE, COLUMN_COMMENT " +
@@ -102,14 +102,14 @@ func (s *Structer) Open(info *DBInfo) error {
 	if info == nil {
 		return errors.New("database info is empty")
 	}
-	
+
 	switch info.Type {
 	case MySQL:
 		s.db = mysql.New()
 	case PostgreSQL:
 		s.db = nil
 	}
-	
+
 	s.db.SetInfo(info)
 
 	return s.db.Connect()
@@ -123,6 +123,10 @@ func (s *Structer) SetLang(ass Assembly) {
 	s.assembly = ass
 }
 
-func (s *Structer) SetDB(ass Assembly) {
-	s.
+func (s *Structer) Columns(tc []*TableColumn) []Columns {
+	return s.assembly.Columns(tc)
+}
+
+func (s *Structer) Parse(tabName string, cs []Columns) error {
+	return s.assembly.Parse(tabName, cs)
 }

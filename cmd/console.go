@@ -36,22 +36,21 @@ var consoleCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		structer := golang.New()
-		structer.DB.SetInfo(
+
+		if err := structer.Open(
 			&core.DBInfo{
 				HostIPAndPort: "45.76.202.255:3306",
 				UserName:      "emp_db",
 				Password:      "TsTkHXDK4xPFtCph",
-				DBType:        "mysql",
+				Type:          core.MySQL,
 				Charset:       "utf8",
 			},
-		)
-
-		if err := structer.DB.Connect(); err != nil {
+		); err != nil {
 			log.Println(err)
 		}
 
-		columns := structer.Assembly.Columns(nil)
-		structer.Assembly.Parse("", columns)
+		columns := structer.Columns(nil)
+		structer.Parse("", columns)
 	},
 }
 
