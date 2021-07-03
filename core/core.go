@@ -19,8 +19,6 @@ THE SOFTWARE.
 package core
 
 import (
-	"errors"
-
 	"github.com/higker/s2s/core/db/mysql"
 )
 
@@ -98,10 +96,6 @@ type Structer struct {
 }
 
 func (s *Structer) OpenDB(info *DBInfo) error {
-
-	if info == nil {
-		return errors.New("database info is empty")
-	}
 
 	switch info.Type {
 	case MySQL:
