@@ -51,7 +51,7 @@ var consoleCmd = &cobra.Command{
 
 		defer structure.Close()
 
-		structure.Parse("", "")
+		structure.Parse("info", "info")
 	},
 }
 

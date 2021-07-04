@@ -17,3 +17,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 package rust
+
+type people struct {
+	name string
+	age  int8
+}
