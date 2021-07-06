@@ -50,7 +50,7 @@ type Assembly interface {
 
 // 抽象的结构体Field接口
 type Field interface {
-	Name() string
+	Field() string
 	Type() string
 	Comment() string
 }

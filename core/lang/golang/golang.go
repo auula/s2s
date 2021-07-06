@@ -19,8 +19,43 @@ THE SOFTWARE.
 package golang
 
 import (
+	"fmt"
+
 	"github.com/higker/s2s/core"
 )
+
+const (
+	template = `
+	type {{ structName }} struct {
+		{{ range _,$value := Fields }}
+		{{ value.Name }} {{ value.Type }} {{ value.Tag }}
+		{{ end }}
+	}
+	`
+)
+
+type GoField struct {
+	tag     string
+	field   string
+	kind    string
+	comment string
+}
+
+func (gf *GoField) Field() string {
+	return gf.field
+}
+
+func (gf *GoField) Type() string {
+	return gf.kind
+}
+
+func (gf *GoField) Comment() string {
+	return gf.comment
+}
+
+func (gf *GoField) Tag() string {
+	return gf.tag
+}
 
 type Assembly struct {
 	core.DataType
@@ -28,7 +63,18 @@ type Assembly struct {
 }
 
 func (goas *Assembly) ToField(tcs []*core.TableColumn) []core.Field {
-	return nil
+	fieldColumn := make([]core.Field, 0, len(tcs))
+	for _, column := range tcs {
+		fmtTag := fmt.Sprintf("`"+"json:"+"\"%s\""+"`", column.ColumnName)
+		fieldColumn = append(fieldColumn, &GoField{
+			tag:     fmtTag,
+			field:   column.ColumnName,
+			kind:    goas.Table[column.DataType],
+			comment: column.ColumnComment,
+		})
+	}
+
+	return fieldColumn
 }
 
 func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
