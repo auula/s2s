@@ -19,13 +19,16 @@ THE SOFTWARE.
 package golang
 
 import (
+	"errors"
 	"fmt"
+	"os"
+	"text/template"
 
 	"github.com/higker/s2s/core"
 )
 
 const (
-	template = `
+	templateStr = `
 	type {{ structName }} struct {
 		{{ range _,$value := Fields }}
 		{{ value.Name }} {{ value.Type }} {{ value.Tag }}
@@ -65,9 +68,8 @@ type Assembly struct {
 func (goas *Assembly) ToField(tcs []*core.TableColumn) []core.Field {
 	fieldColumn := make([]core.Field, 0, len(tcs))
 	for _, column := range tcs {
-		fmtTag := fmt.Sprintf("`"+"json:"+"\"%s\""+"`", column.ColumnName)
 		fieldColumn = append(fieldColumn, &GoField{
-			tag:     fmtTag,
+			tag:     fmt.Sprintf("`"+"json:"+"\"%s\""+"`", column.ColumnName),
 			field:   column.ColumnName,
 			kind:    goas.Table[column.DataType],
 			comment: column.ColumnComment,
@@ -78,13 +80,35 @@ func (goas *Assembly) ToField(tcs []*core.TableColumn) []core.Field {
 }
 
 func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
-	return nil
+
+	if tabName == "" || len(cs) <= 0 {
+		return errors.New("table name info or []core.Field is empty")
+	}
+
+	// 生成模板准备解析
+	tpl := template.Must(template.New("s2s_golang").Funcs(
+		template.FuncMap{
+			"ToCamelCase": core.CamelCaseFunc,
+		},
+	).Parse(goas.structTpl))
+
+	type (
+		columns struct {
+			TableName string
+			Columns   []core.Field
+		}
+	)
+
+	return tpl.Execute(os.Stdout, columns{
+		TableName: tabName,
+		Columns:   cs,
+	})
 }
 
 func NewAssembly() *Assembly {
 	var goas Assembly
 	goas.Lang = core.Golang
-	goas.structTpl = ""
+	goas.structTpl = templateStr
 	goas.Table = map[string]string{
 		"int":        "int32",
 		"tinyint":    "int8",
