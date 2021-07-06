@@ -16,9 +16,9 @@ limitations under the License.
 package cmd
 
 import (
+	"github.com/higker/s2s/core"
 	"log"
 
-	"github.com/higker/s2s/core"
 	"github.com/higker/s2s/core/lang/golang"
 	"github.com/spf13/cobra"
 )

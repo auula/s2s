@@ -21,7 +21,9 @@ package golang
 import (
 	"errors"
 	"fmt"
-	"github.com/higker/s2s/core/assembly"
+	"github.com/higker/s2s/core"
+	"github.com/higker/s2s/core/db"
+	"github.com/higker/s2s/core/lang"
 	"os"
 	"text/template"
 )
@@ -60,12 +62,12 @@ func (gf *GoField) Tag() string {
 }
 
 type Assembly struct {
-	assembly.DataType
+	lang.DataType
 	structTpl string
 }
 
-func (goas *Assembly) ToField(tcs []*assembly.TableColumn) []assembly.Field {
-	fieldColumn := make([]assembly.Field, 0, len(tcs))
+func (goas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
+	fieldColumn := make([]core.Field, 0, len(tcs))
 	for _, column := range tcs {
 		fieldColumn = append(fieldColumn, &GoField{
 			tag:     fmt.Sprintf("`"+"json:"+"\"%s\""+"`", column.ColumnName),
@@ -78,7 +80,7 @@ func (goas *Assembly) ToField(tcs []*assembly.TableColumn) []assembly.Field {
 	return fieldColumn
 }
 
-func (goas *Assembly) Parse(tabName string, cs []assembly.Field) error {
+func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
 
 	if tabName == "" || len(cs) <= 0 {
 		return errors.New("table name info or []core.Field is empty")
@@ -87,14 +89,14 @@ func (goas *Assembly) Parse(tabName string, cs []assembly.Field) error {
 	// 生成模板准备解析
 	tpl := template.Must(template.New("s2s_golang").Funcs(
 		template.FuncMap{
-			"ToCamelCase": assembly.CamelCaseFunc,
+			"ToCamelCase": core.CamelCaseFunc,
 		},
 	).Parse(goas.structTpl))
 
 	type (
 		structure struct {
 			structName string
-			Columns    []assembly.Field
+			Columns    []core.Field
 		}
 	)
 
@@ -106,7 +108,7 @@ func (goas *Assembly) Parse(tabName string, cs []assembly.Field) error {
 
 func NewAssembly() *Assembly {
 	var goas Assembly
-	goas.Lang = assembly.Golang
+	goas.Lang = lang.Golang
 	goas.structTpl = templateStr
 	goas.Table = map[string]string{
 		"int":        "int32",
@@ -137,8 +139,8 @@ func NewAssembly() *Assembly {
 	}
 	return &goas
 }
-func New() *assembly.Structure {
-	sts := new(assembly.Structure)
+func New() *core.Structure {
+	sts := new(core.Structure)
 	sts.SetLang(NewAssembly())
 	return sts
 }

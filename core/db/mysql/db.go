@@ -22,39 +22,38 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-
-	"github.com/higker/s2s/core"
+	"github.com/higker/s2s/core/db"
 )
 
 type DB struct {
 	source *sql.DB
-	info   *core.DBInfo
+	info   *db.Info
 }
 
-func New() core.DataBase {
+func New() db.DataBase {
 	return new(DB)
 }
 
-func (db *DB) Type() core.DBType {
-	return db.info.Type
+func (d *DB) Type() db.Type {
+	return d.info.Type
 }
 
-func (db *DB) Connect() error {
+func (d *DB) Connect() error {
 	var err error
-	if db.info == nil {
+	if d.info == nil {
 		return errors.New("database info is empty")
 	}
-	dsn := fmt.Sprintf(core.DataSourceFormat,
-		db.info.UserName,
-		db.info.Password,
-		db.info.HostIPAndPort,
-		db.info.Charset,
+	dsn := fmt.Sprintf(db.DataSourceFormat,
+		d.info.UserName,
+		d.info.Password,
+		d.info.HostIPAndPort,
+		d.info.Charset,
 	)
-	db.source, err = sql.Open("mysql", dsn)
+	d.source, err = sql.Open("mysql", dsn)
 	return err
 }
 
-func (db *DB) SetInfo(info *core.DBInfo) {
+func (db *DB) SetInfo(info *db.Info) {
 	db.info = info
 }
 
@@ -62,8 +61,8 @@ func (db *DB) Close() error {
 	return db.source.Close()
 }
 
-func (db *DB) GetColumns(dbName, tableName string) ([]*core.TableColumn, error) {
-	rows, err := db.source.Query(core.QuerySQL, dbName, tableName)
+func (d *DB) GetColumns(dbName, tableName string) ([]*db.TableColumn, error) {
+	rows, err := d.source.Query(db.QuerySQL, dbName, tableName)
 	if err != nil {
 		return nil, err
 	}
@@ -72,9 +71,9 @@ func (db *DB) GetColumns(dbName, tableName string) ([]*core.TableColumn, error) 
 	}
 	defer rows.Close()
 
-	var columns []*core.TableColumn
+	var columns []*db.TableColumn
 	for rows.Next() {
-		var column core.TableColumn
+		var column db.TableColumn
 		err := rows.Scan(&column.ColumnName, &column.ColumnType, &column.ColumnKey, &column.IsNullable, &column.ColumnType, &column.ColumnComment)
 		if err != nil {
 			return nil, err

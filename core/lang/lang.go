@@ -5,3 +5,19 @@
 // todo...
 
 package lang
+
+type (
+	Languages int8
+	DBType    int8
+)
+
+const (
+	Java Languages = iota
+	Rust
+	Golang
+)
+
+type DataType struct {
+	Table map[string]string
+	Lang  Languages
+}
