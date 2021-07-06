@@ -19,6 +19,8 @@ THE SOFTWARE.
 package core
 
 import (
+	"strings"
+
 	"github.com/higker/s2s/core/db/mysql"
 )
 
@@ -40,6 +42,15 @@ const (
 	QuerySQL         = "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_KEY, " +
 		"IS_NULLABLE, COLUMN_TYPE, COLUMN_COMMENT " +
 		"FROM COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? "
+)
+
+var (
+	// 驼峰英文转换函数
+	CamelCaseFunc = func(str string) string {
+		str = strings.Replace(str, "_", " ", -1)
+		str = strings.Title(str)
+		return strings.Replace(str, " ", "", -1)
+	}
 )
 
 // 结构体解析接口
