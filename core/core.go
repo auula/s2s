@@ -20,12 +20,11 @@ package core
 
 import (
 	"github.com/higker/s2s/core/db"
+	"io"
 	"strings"
 
 	"github.com/higker/s2s/core/db/mysql"
 )
-
-
 
 var (
 	// 驼峰英文转换函数
@@ -38,7 +37,7 @@ var (
 
 // 结构体解析接口
 type Assembly interface {
-	Parse(tabName string, cs []Field) error
+	Parse(wr io.Writer, tabName string, cs []Field) error
 	ToField(tcs []*db.TableColumn) []Field
 }
 
@@ -58,11 +57,7 @@ type Structure struct {
 	db       db.DataBase
 }
 
-
-
 type Agrs struct{}
-
-
 
 func (s *Structure) OpenDB(info *db.Info) error {
 
@@ -86,10 +81,10 @@ func (s *Structure) SetLang(ass Assembly) {
 	s.assembly = ass
 }
 
-func (s *Structure) Parse(dbName, tabName string) error {
+func (s *Structure) Parse(wr io.Writer, dbName, tabName string) error {
 	columns, err := s.db.GetColumns(dbName, tabName)
 	if err != nil {
 		return err
 	}
-	return s.assembly.Parse(tabName, s.assembly.ToField(columns))
+	return s.assembly.Parse(wr, tabName, s.assembly.ToField(columns))
 }

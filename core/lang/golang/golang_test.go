@@ -21,14 +21,18 @@ package golang_test
 import (
 	"github.com/higker/s2s/core/db"
 	"log"
+	"os"
 	"testing"
 
 	"github.com/higker/s2s/core/lang/golang"
 )
 
-func TestGoAssembly_Parse(t *testing.T) {
-	structure := golang.NewAssembly()
-	tcs := make([]*db.TableColumn, 3, 3)
+var (
+	structure = golang.NewAssembly()
+	tcs       = make([]*db.TableColumn, 3, 3)
+)
+
+func TestMain(m *testing.M) {
 	tcs[0] = &db.TableColumn{
 		ColumnName:    "uid",
 		DataType:      "bigint",
@@ -50,9 +54,17 @@ func TestGoAssembly_Parse(t *testing.T) {
 		ColumnType:    "ct",
 		ColumnKey:     "key",
 	}
+	m.Run()
+}
+
+func TestGoAssembly_ToField(t *testing.T) {
 	fields := structure.ToField(tcs)
 	for _, field := range fields {
 		log.Println(field)
 	}
 
+}
+
+func TestAssembly_Parse(t *testing.T) {
+	structure.Parse(os.Stdout, "tableName", structure.ToField(tcs))
 }

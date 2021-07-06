@@ -24,16 +24,14 @@ import (
 	"github.com/higker/s2s/core"
 	"github.com/higker/s2s/core/db"
 	"github.com/higker/s2s/core/lang"
-	"os"
+	"io"
 	"text/template"
 )
 
 const (
 	templateStr = `
-	type {{ call ToCamelCase .structName }} struct {
-		{{ range _,$value := Fields }}
-		{{ value.Name }} {{ value.Type }} {{ value.Tag }}
-		{{ end }}
+	type {{ .StructName | ToCamelCase}} struct {
+		
 	}
 	`
 )
@@ -66,13 +64,13 @@ type Assembly struct {
 	structTpl string
 }
 
-func (goas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
+func (gas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
 	fieldColumn := make([]core.Field, 0, len(tcs))
 	for _, column := range tcs {
 		fieldColumn = append(fieldColumn, &GoField{
 			tag:     fmt.Sprintf("`"+"json:"+"\"%s\""+"`", column.ColumnName),
 			field:   column.ColumnName,
-			kind:    goas.Table[column.DataType],
+			kind:    gas.Table[column.DataType],
 			comment: column.ColumnComment,
 		})
 	}
@@ -80,7 +78,7 @@ func (goas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
 	return fieldColumn
 }
 
-func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
+func (gas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error {
 
 	if tabName == "" || len(cs) <= 0 {
 		return errors.New("table name info or []core.Field is empty")
@@ -91,26 +89,26 @@ func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
 		},
-	).Parse(goas.structTpl))
+	).Parse(gas.structTpl))
 
 	type (
 		structure struct {
-			structName string
+			StructName string
 			Columns    []core.Field
 		}
 	)
 
-	return tpl.Execute(os.Stdout, structure{
-		structName: tabName,
+	return tpl.Execute(wr, structure{
+		StructName: tabName,
 		Columns:    cs,
 	})
 }
 
 func NewAssembly() *Assembly {
-	var goas Assembly
-	goas.Lang = lang.Golang
-	goas.structTpl = templateStr
-	goas.Table = map[string]string{
+	var gas Assembly
+	gas.Lang = lang.Golang
+	gas.structTpl = templateStr
+	gas.Table = map[string]string{
 		"int":        "int32",
 		"tinyint":    "int8",
 		"smallint":   "int",
@@ -137,7 +135,7 @@ func NewAssembly() *Assembly {
 		"float":      "float64",
 		"double":     "float64",
 	}
-	return &goas
+	return &gas
 }
 func New() *core.Structure {
 	sts := new(core.Structure)

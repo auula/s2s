@@ -8,7 +8,6 @@ package lang
 
 type (
 	Languages int8
-	DBType    int8
 )
 
 const (
