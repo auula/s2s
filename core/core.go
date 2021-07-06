@@ -19,30 +19,13 @@ THE SOFTWARE.
 package core
 
 import (
+	"github.com/higker/s2s/core/db"
 	"strings"
 
 	"github.com/higker/s2s/core/db/mysql"
 )
 
-type (
-	Languages int8
-	DBType    int8
-)
 
-const (
-	Java Languages = iota
-	Rust
-	Golang
-)
-
-const (
-	MySQL DBType = iota
-	PostgreSQL
-	DataSourceFormat = "%s:%s@tcp(%s)/information_schema?charset=%s&parseTime=True&loc=Local"
-	QuerySQL         = "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_KEY, " +
-		"IS_NULLABLE, COLUMN_TYPE, COLUMN_COMMENT " +
-		"FROM COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? "
-)
 
 var (
 	// 驼峰英文转换函数
@@ -56,7 +39,7 @@ var (
 // 结构体解析接口
 type Assembly interface {
 	Parse(tabName string, cs []Field) error
-	ToField(tcs []*TableColumn) []Field
+	ToField(tcs []*db.TableColumn) []Field
 }
 
 // 抽象的结构体Field接口
@@ -66,64 +49,28 @@ type Field interface {
 	Comment() string
 }
 
-type DataBase interface {
-	Type() DBType
-	Close() error
-	Connect() error
-	SetInfo(info *DBInfo)
-	GetColumns(dbName, tabName string) ([]*TableColumn, error)
-}
 
-type DataType struct {
-	Table map[string]string
-	Lang  Languages
-}
 type WebServer struct {
 	Port string
 }
 
 type Structure struct {
 	assembly Assembly
-	db       DataBase
+	db       db.DataBase
 }
 
-type DBInfo struct {
-	HostIPAndPort string
-	UserName      string
-	Password      string
-	Charset       string
-	Type          DBType
-}
+
 
 type Agrs struct{}
 
-type TableColumn struct {
-	ColumnName    string
-	DataType      string
-	IsNullable    string
-	ColumnKey     string
-	ColumnType    string
-	ColumnComment string
-}
 
-func (t *TableColumn) Name() string {
-	return t.ColumnName
-}
 
-func (t *TableColumn) Type() string {
-	return t.ColumnType
-}
-
-func (t *TableColumn) Comment() string {
-	return t.ColumnComment
-}
-
-func (s *Structure) OpenDB(info *DBInfo) error {
+func (s *Structure) OpenDB(info *db.Info) error {
 
 	switch info.Type {
-	case MySQL:
+	case db.MySQL:
 		s.db = mysql.New()
-	case PostgreSQL:
+	case db.PostgreSQL:
 		s.db = nil
 	}
 

@@ -21,15 +21,14 @@ package golang
 import (
 	"errors"
 	"fmt"
+	"github.com/higker/s2s/core/assembly"
 	"os"
 	"text/template"
-
-	"github.com/higker/s2s/core"
 )
 
 const (
 	templateStr = `
-	type {{ structName }} struct {
+	type {{ call ToCamelCase .structName }} struct {
 		{{ range _,$value := Fields }}
 		{{ value.Name }} {{ value.Type }} {{ value.Tag }}
 		{{ end }}
@@ -61,12 +60,12 @@ func (gf *GoField) Tag() string {
 }
 
 type Assembly struct {
-	core.DataType
+	assembly.DataType
 	structTpl string
 }
 
-func (goas *Assembly) ToField(tcs []*core.TableColumn) []core.Field {
-	fieldColumn := make([]core.Field, 0, len(tcs))
+func (goas *Assembly) ToField(tcs []*assembly.TableColumn) []assembly.Field {
+	fieldColumn := make([]assembly.Field, 0, len(tcs))
 	for _, column := range tcs {
 		fieldColumn = append(fieldColumn, &GoField{
 			tag:     fmt.Sprintf("`"+"json:"+"\"%s\""+"`", column.ColumnName),
@@ -79,7 +78,7 @@ func (goas *Assembly) ToField(tcs []*core.TableColumn) []core.Field {
 	return fieldColumn
 }
 
-func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
+func (goas *Assembly) Parse(tabName string, cs []assembly.Field) error {
 
 	if tabName == "" || len(cs) <= 0 {
 		return errors.New("table name info or []core.Field is empty")
@@ -88,26 +87,26 @@ func (goas *Assembly) Parse(tabName string, cs []core.Field) error {
 	// 生成模板准备解析
 	tpl := template.Must(template.New("s2s_golang").Funcs(
 		template.FuncMap{
-			"ToCamelCase": core.CamelCaseFunc,
+			"ToCamelCase": assembly.CamelCaseFunc,
 		},
 	).Parse(goas.structTpl))
 
 	type (
-		columns struct {
-			TableName string
-			Columns   []core.Field
+		structure struct {
+			structName string
+			Columns    []assembly.Field
 		}
 	)
 
-	return tpl.Execute(os.Stdout, columns{
-		TableName: tabName,
-		Columns:   cs,
+	return tpl.Execute(os.Stdout, structure{
+		structName: tabName,
+		Columns:    cs,
 	})
 }
 
 func NewAssembly() *Assembly {
 	var goas Assembly
-	goas.Lang = core.Golang
+	goas.Lang = assembly.Golang
 	goas.structTpl = templateStr
 	goas.Table = map[string]string{
 		"int":        "int32",
@@ -138,8 +137,8 @@ func NewAssembly() *Assembly {
 	}
 	return &goas
 }
-func New() *core.Structure {
-	sts := new(core.Structure)
+func New() *assembly.Structure {
+	sts := new(assembly.Structure)
 	sts.SetLang(NewAssembly())
 	return sts
 }
