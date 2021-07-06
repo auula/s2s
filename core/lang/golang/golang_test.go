@@ -28,28 +28,31 @@ import (
 
 func TestGoAssembly_Parse(t *testing.T) {
 	structure := golang.NewAssembly()
-	tcs := make([]*db.TableColumn, 0, 3)
+	tcs := make([]*db.TableColumn, 3, 3)
 	tcs[0] = &db.TableColumn{
-		ColumnName: "uid",
-		DataType:   "bigint",
+		ColumnName:    "uid",
+		DataType:      "bigint",
 		ColumnComment: "用户id",
-		ColumnType: "ct",
-		ColumnKey: "key",
+		ColumnType:    "ct",
+		ColumnKey:     "key",
 	}
 	tcs[1] = &db.TableColumn{
-		ColumnName: "account",
-		DataType:   "varchar",
+		ColumnName:    "account",
+		DataType:      "varchar",
 		ColumnComment: "用户账户",
-		ColumnType: "ct",
-		ColumnKey: "key",
+		ColumnType:    "ct",
+		ColumnKey:     "key",
 	}
 	tcs[2] = &db.TableColumn{
-		ColumnName: "create_time",
-		DataType:   "datetime",
+		ColumnName:    "create_time",
+		DataType:      "datetime",
 		ColumnComment: "用户注册时间",
-		ColumnType: "ct",
-		ColumnKey: "key",
+		ColumnType:    "ct",
+		ColumnKey:     "key",
 	}
 	fields := structure.ToField(tcs)
-	log.Println(fields)
+	for _, field := range fields {
+		log.Println(field)
+	}
+
 }
