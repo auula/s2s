@@ -21,16 +21,17 @@ package golang
 import (
 	"errors"
 	"fmt"
+	"io"
+	"text/template"
+
 	"github.com/higker/s2s/core"
 	"github.com/higker/s2s/core/db"
 	"github.com/higker/s2s/core/lang"
-	"io"
-	"text/template"
 )
 
 const (
 	templateStr = `
-	type {{ .StructName | ToCamelCase}} struct {
+	type {{ .StructName | ToCamelCase }} struct {
 		
 	}
 	`
