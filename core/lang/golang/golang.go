@@ -58,26 +58,26 @@ var (
 		101, 32, 125, 125, 41, 10, 9, 9, 114, 101, 116, 117, 114, 110, 32, 115, 116, 114, 10, 9, 125, 10, 9}
 )
 
-type GoField struct {
+type Field struct {
 	tag     string
 	field   string
 	kind    string
 	comment string
 }
 
-func (gf *GoField) Field() string {
+func (gf *Field) Field() string {
 	return gf.field
 }
 
-func (gf *GoField) Type() string {
+func (gf *Field) Type() string {
 	return gf.kind
 }
 
-func (gf *GoField) Comment() string {
+func (gf *Field) Comment() string {
 	return gf.comment
 }
 
-func (gf *GoField) Tag() string {
+func (gf *Field) Tag() string {
 	return gf.tag
 }
 
@@ -89,7 +89,7 @@ type Assembly struct {
 func (gas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
 	fieldColumn := make([]core.Field, 0, len(tcs))
 	for _, column := range tcs {
-		fieldColumn = append(fieldColumn, &GoField{
+		fieldColumn = append(fieldColumn, &Field{
 			tag:     fmt.Sprintf("`"+"json:"+"\"%s\""+"`", column.ColumnName),
 			field:   column.ColumnName,
 			kind:    gas.Table[column.DataType],

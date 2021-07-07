@@ -58,6 +58,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestGoAssembly_ToField(t *testing.T) {
+
 	fields := structure.ToField(tcs)
 	for _, field := range fields {
 		t.Log(field)

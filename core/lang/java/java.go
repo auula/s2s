@@ -17,3 +17,109 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 package java
+
+import "github.com/higker/s2s/core/lang"
+
+var (
+	SourceByte = `
+public class User {
+
+    private Integer id;
+
+    private String account;
+
+    private String nickName;
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", nickName='" + nickName + '\'' +
+                '}';
+    }
+}
+	`
+)
+
+type Field struct {
+	field   string
+	kind    string
+	comment string
+}
+
+func (j *Field) Field() string {
+	return j.field
+}
+
+func (j *Field) Type() string {
+	return j.kind
+}
+
+func (j *Field) Comment() string {
+	return j.comment
+}
+
+type Assembly struct {
+	lang.DataType
+	source []byte
+}
+
+func NewAssembly() *Assembly {
+	var jas Assembly
+	jas.Lang = lang.Java
+	jas.source = []byte(SourceByte)
+	jas.Table = map[string]string{
+		"int":        "Integer",
+		"tinyint":    "Integer",
+		"smallint":   "Integer",
+		"mediumint":  "Integer",
+		"bigint":     "java.math.BigInteger",
+		"bit":        "java.lang.Boolean",
+		"bool":       "java.lang.Boolean",
+		"enum":       "String",
+		"set":        "String",
+		"varchar":    "String",
+		"char":       "String",
+		"tinytext":   "String",
+		"mediumtext": "String",
+		"text":       "String",
+		"longtext":   "String",
+		"blob":       "java.lang.byte[]",
+		"tinyblob":   "String",
+		"mediumblob": "String",
+		"longblob":   "String",
+		"date":       "java.sql.Date",
+		"datetime":   "java.sql.Timestamp",
+		"timestamp":  "java.sql.Timestamp",
+		"time":       "java.sql.Time",
+		"float":      "java.lang.Float",
+		"double":     "java.lang.Double",
+	}
+	return &jas
+}
