@@ -18,7 +18,11 @@ THE SOFTWARE.
 */
 package java
 
-import "github.com/higker/s2s/core/lang"
+import (
+	"github.com/higker/s2s/core"
+	"github.com/higker/s2s/core/db"
+	"github.com/higker/s2s/core/lang"
+)
 
 var (
 	SourceByte = `
@@ -65,7 +69,24 @@ public class User {
     }
 }
 	`
+	//{"BigInteger", "Boolean", "Date", "Timestamp", "Time","Float", "Double"}
+	Imports []*AutomaticImports
 )
+
+func init() {
+	Imports = append(Imports, &AutomaticImports{Kind: "Time", Pkg: "java.sql.Time"})
+	Imports = append(Imports, &AutomaticImports{Kind: "Date", Pkg: "java.sql.Date"})
+	Imports = append(Imports, &AutomaticImports{Kind: "Float", Pkg: "java.lang.Float"})
+	Imports = append(Imports, &AutomaticImports{Kind: "Double", Pkg: "java.lang.Double"})
+	Imports = append(Imports, &AutomaticImports{Kind: "Boolean", Pkg: "java.lang.Boolean"})
+	Imports = append(Imports, &AutomaticImports{Kind: "Timestamp", Pkg: "java.sql.Timestamp"})
+	Imports = append(Imports, &AutomaticImports{Kind: "BigInteger", Pkg: "java.math.BigInteger"})
+}
+
+type AutomaticImports struct {
+	Kind string
+	Pkg  string
+}
 
 type Field struct {
 	field   string
@@ -87,7 +108,31 @@ func (j *Field) Comment() string {
 
 type Assembly struct {
 	lang.DataType
-	source []byte
+	source  []byte
+	imports []string
+}
+
+func (jas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
+
+	fieldColumn := make([]core.Field, 0, len(tcs))
+
+	for _, column := range tcs {
+		fieldColumn = append(fieldColumn, &Field{
+			field:   column.ColumnName,
+			kind:    jas.Table[column.DataType],
+			comment: column.ColumnComment,
+		})
+	}
+
+	importPkg := make([]string, 0)
+
+	for _, field := range fieldColumn {
+		switch field {
+
+		}
+	}
+
+	return fieldColumn
 }
 
 func NewAssembly() *Assembly {
