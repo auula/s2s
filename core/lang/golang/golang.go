@@ -83,7 +83,7 @@ func (gf *GoField) Tag() string {
 
 type Assembly struct {
 	lang.DataType
-	structTpl []byte
+	source []byte
 }
 
 func (gas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
@@ -111,7 +111,7 @@ func (gas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
 		},
-	).Parse(string(gas.structTpl)))
+	).Parse(string(gas.source)))
 
 	type (
 		structure struct {
@@ -129,7 +129,7 @@ func (gas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 func NewAssembly() *Assembly {
 	var gas Assembly
 	gas.Lang = lang.Golang
-	gas.structTpl = SourceByte
+	gas.source = SourceByte
 	gas.Table = map[string]string{
 		"int":        "int32",
 		"tinyint":    "int8",

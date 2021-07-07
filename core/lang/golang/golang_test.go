@@ -67,5 +67,4 @@ func TestGoAssembly_ToField(t *testing.T) {
 
 func TestAssembly_Parse(t *testing.T) {
 	structure.Parse(os.Stdout, "tableName", structure.ToField(tcs))
-	t.Log([]byte(golang.TemplateStr))
 }
