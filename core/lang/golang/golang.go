@@ -32,7 +32,13 @@ import (
 const (
 	templateStr = `
 	type {{ .StructName | ToCamelCase }} struct {
-		
+		{{ range .Columns }}
+		{{ .Field | ToCamelCase }}	{{ .Type | ToCamelCase }} {{ .Tag  }}
+		{{ end }}
+	}
+
+	func ({{ .StructName }} *{{ .StructName | ToCamelCase }}) TableName() string {
+		return "{{ .StructName | ToCamelCase }}"
 	}
 	`
 )

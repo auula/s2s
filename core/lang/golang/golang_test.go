@@ -19,10 +19,11 @@ THE SOFTWARE.
 package golang_test
 
 import (
-	"github.com/higker/s2s/core/db"
 	"log"
 	"os"
 	"testing"
+
+	"github.com/higker/s2s/core/db"
 
 	"github.com/higker/s2s/core/lang/golang"
 )
