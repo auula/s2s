@@ -129,8 +129,10 @@ func (jas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
 	importPkg := make([]string, 0)
 
 	for _, field := range fieldColumn {
-		switch field {
-
+		for i := range Imports {
+			if field.Type() == Imports[i].Kind {
+				importPkg = append(importPkg, Imports[i].Pkg)
+			}
 		}
 	}
 
