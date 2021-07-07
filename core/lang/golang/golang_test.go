@@ -19,7 +19,6 @@ THE SOFTWARE.
 package golang_test
 
 import (
-	"log"
 	"os"
 	"testing"
 
@@ -61,11 +60,12 @@ func TestMain(m *testing.M) {
 func TestGoAssembly_ToField(t *testing.T) {
 	fields := structure.ToField(tcs)
 	for _, field := range fields {
-		log.Println(field)
+		t.Log(field)
 	}
 
 }
 
 func TestAssembly_Parse(t *testing.T) {
 	structure.Parse(os.Stdout, "tableName", structure.ToField(tcs))
+	t.Log([]byte(golang.TemplateStr))
 }

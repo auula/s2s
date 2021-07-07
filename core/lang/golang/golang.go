@@ -29,29 +29,33 @@ import (
 	"github.com/higker/s2s/core/lang"
 )
 
-const (
-	templateStr = `
-	package model
-	
-	import (
-		"encoding/json"
-	)
-
-	type {{ .StructName | ToCamelCase }} struct {
-		{{ range .Columns }}
-		{{ .Field | ToCamelCase }}	{{ .Type }} {{ .Tag  }}
-		{{ end }}
-	}
-
-	func ({{ .StructName }} *{{ .StructName | ToCamelCase }}) TableName() string {
-		return "{{ .StructName | ToCamelCase }}"
-	}
-
-	func ({{ .StructName }} *{{ .StructName | ToCamelCase }}) ToJson() string {
-		str,_ := json.Marshal({{ .StructName }})
-		return str
-	}
-	`
+var (
+	SourceByte = []byte{
+		10, 9, 112, 97, 99, 107, 97, 103, 101, 32, 109, 111, 100, 101,
+		108, 10, 9, 10, 9, 105, 109, 112, 111, 114, 116, 32, 40, 10, 9,
+		9, 34, 101, 110, 99, 111, 100, 105, 110, 103, 47, 106, 115, 111,
+		110, 34, 10, 9, 41, 10, 10, 9, 116, 121, 112, 101, 32, 123, 123,
+		32, 46, 83, 116, 114, 117, 99, 116, 78, 97, 109, 101, 32, 124, 32,
+		84, 111, 67, 97, 109, 101, 108, 67, 97, 115, 101, 32, 125, 125, 32,
+		115, 116, 114, 117, 99, 116, 32, 123, 10, 9, 9, 123, 123, 32, 114, 97,
+		110, 103, 101, 32, 46, 67, 111, 108, 117, 109, 110, 115, 32, 125, 125,
+		10, 9, 9, 123, 123, 32, 46, 70, 105, 101, 108, 100, 32, 124, 32, 84, 111,
+		67, 97, 109, 101, 108, 67, 97, 115, 101, 32, 125, 125, 9, 123, 123, 32, 46,
+		84, 121, 112, 101, 32, 125, 125, 32, 123, 123, 32, 46, 84, 97, 103, 32, 32,
+		125, 125, 10, 9, 9, 123, 123, 32, 101, 110, 100, 32, 125, 125, 10, 9, 125, 10,
+		10, 9, 102, 117, 110, 99, 32, 40, 123, 123, 32, 46, 83, 116, 114, 117, 99, 116,
+		78, 97, 109, 101, 32, 125, 125, 32, 42, 123, 123, 32, 46, 83, 116, 114, 117, 99,
+		116, 78, 97, 109, 101, 32, 124, 32, 84, 111, 67, 97, 109, 101, 108, 67, 97, 115, 101,
+		32, 125, 125, 41, 32, 84, 97, 98, 108, 101, 78, 97, 109, 101, 40, 41, 32, 115, 116, 114,
+		105, 110, 103, 32, 123, 10, 9, 9, 114, 101, 116, 117, 114, 110, 32, 34, 123, 123, 32, 46,
+		83, 116, 114, 117, 99, 116, 78, 97, 109, 101, 32, 124, 32, 84, 111, 67, 97, 109, 101, 108,
+		67, 97, 115, 101, 32, 125, 125, 34, 10, 9, 125, 10, 10, 9, 102, 117, 110, 99, 32, 40, 123,
+		123, 32, 46, 83, 116, 114, 117, 99, 116, 78, 97, 109, 101, 32, 125, 125, 32, 42, 123, 123,
+		32, 46, 83, 116, 114, 117, 99, 116, 78, 97, 109, 101, 32, 124, 32, 84, 111, 67, 97, 109, 101,
+		108, 67, 97, 115, 101, 32, 125, 125, 41, 32, 84, 111, 74, 115, 111, 110, 40, 41, 32, 115, 116,
+		114, 105, 110, 103, 32, 123, 10, 9, 9, 115, 116, 114, 44, 95, 32, 58, 61, 32, 106, 115, 111, 110,
+		46, 77, 97, 114, 115, 104, 97, 108, 40, 123, 123, 32, 46, 83, 116, 114, 117, 99, 116, 78, 97, 109,
+		101, 32, 125, 125, 41, 10, 9, 9, 114, 101, 116, 117, 114, 110, 32, 115, 116, 114, 10, 9, 125, 10, 9}
 )
 
 type GoField struct {
@@ -79,7 +83,7 @@ func (gf *GoField) Tag() string {
 
 type Assembly struct {
 	lang.DataType
-	structTpl string
+	structTpl []byte
 }
 
 func (gas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
@@ -107,7 +111,7 @@ func (gas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
 		},
-	).Parse(gas.structTpl))
+	).Parse(string(gas.structTpl)))
 
 	type (
 		structure struct {
@@ -125,7 +129,7 @@ func (gas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 func NewAssembly() *Assembly {
 	var gas Assembly
 	gas.Lang = lang.Golang
-	gas.structTpl = templateStr
+	gas.structTpl = SourceByte
 	gas.Table = map[string]string{
 		"int":        "int32",
 		"tinyint":    "int8",
