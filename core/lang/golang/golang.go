@@ -31,6 +31,12 @@ import (
 
 const (
 	templateStr = `
+	package model
+	
+	import (
+		"encoding/json"
+	)
+
 	type {{ .StructName | ToCamelCase }} struct {
 		{{ range .Columns }}
 		{{ .Field | ToCamelCase }}	{{ .Type }} {{ .Tag  }}
@@ -39,6 +45,11 @@ const (
 
 	func ({{ .StructName }} *{{ .StructName | ToCamelCase }}) TableName() string {
 		return "{{ .StructName | ToCamelCase }}"
+	}
+
+	func ({{ .StructName }} *{{ .StructName | ToCamelCase }}) ToJson() string {
+		str,_ := json.Marshal({{ .StructName }})
+		return str
 	}
 	`
 )
@@ -147,5 +158,6 @@ func NewAssembly() *Assembly {
 func New() *core.Structure {
 	sts := new(core.Structure)
 	sts.SetLang(NewAssembly())
+
 	return sts
 }
