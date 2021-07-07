@@ -33,7 +33,7 @@ const (
 	templateStr = `
 	type {{ .StructName | ToCamelCase }} struct {
 		{{ range .Columns }}
-		{{ .Field | ToCamelCase }}	{{ .Type | ToCamelCase }} {{ .Tag  }}
+		{{ .Field | ToCamelCase }}	{{ .Type }} {{ .Tag  }}
 		{{ end }}
 	}
 
