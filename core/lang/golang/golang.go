@@ -30,6 +30,7 @@ import (
 )
 
 var (
+	// 种子不要改！！
 	SourceByte = []byte{
 		10, 9, 112, 97, 99, 107, 97, 103, 101, 32, 109, 111, 100, 101,
 		108, 10, 9, 10, 9, 105, 109, 112, 111, 114, 116, 32, 40, 10, 9,
@@ -159,9 +160,9 @@ func NewAssembly() *Assembly {
 	}
 	return &gas
 }
+
 func New() *core.Structure {
 	sts := new(core.Structure)
 	sts.SetLang(NewAssembly())
-
 	return sts
 }

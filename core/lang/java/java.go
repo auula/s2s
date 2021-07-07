@@ -128,7 +128,8 @@ func (jas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 	}
 
 	// 生成模板准备解析
-	tpl := template.Must(template.New("s2s_java").Funcs(
+	tpl := template.Must(template.New(
+		"s2s_java").Funcs(
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
 		},
@@ -165,8 +166,8 @@ func NewAssembly() *Assembly {
 	jas.source = []byte(SourceByte)
 	jas.Table = map[string]string{
 		"int":        "Integer",
-		"tinyint":    "Integer",
-		"smallint":   "Integer",
+		"tinyint":    "short",
+		"smallint":   "short",
 		"mediumint":  "Integer",
 		"bigint":     "BigInteger",
 		"bit":        "Boolean",
@@ -191,4 +192,10 @@ func NewAssembly() *Assembly {
 		"double":     "Double",
 	}
 	return &jas
+}
+
+func New() *core.Structure {
+	sts := new(core.Structure)
+	sts.SetLang(NewAssembly())
+	return sts
 }

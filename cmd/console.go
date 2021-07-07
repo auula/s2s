@@ -16,10 +16,11 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/higker/s2s/core"
+	"github.com/higker/s2s/core/db"
+	"github.com/higker/s2s/core/lang/rust"
 	"log"
+	"os"
 
-	"github.com/higker/s2s/core/lang/golang"
 	"github.com/spf13/cobra"
 )
 
@@ -35,14 +36,14 @@ var consoleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		structure := golang.New()
+		structure := rust.New()
 
 		if err := structure.OpenDB(
-			&core.DBInfo{
-				HostIPAndPort: "45.76.202.255:3306",
-				UserName:      "emp_db",
-				Password:      "TsTkHXDK4xPFtCph",
-				Type:          core.MySQL,
+			&db.Info{
+				HostIPAndPort: os.Getenv("HostIPAndPort"), // 数据库IP
+				UserName:      "emp_db",                   // 数据库用户名
+				Password:      os.Getenv("Password"),      // 数据库密码
+				Type:          db.MySQL,                   // 数据库类型 PostgreSQL Oracle
 				Charset:       "utf8",
 			},
 		); err != nil {
@@ -51,7 +52,8 @@ var consoleCmd = &cobra.Command{
 
 		defer structure.Close()
 
-		structure.Parse("info", "info")
+		// 结果输出到标准输出   "数据库名"   "表名"
+		structure.Parse(os.Stdout, "emp_db", "user_info")
 	},
 }
 
