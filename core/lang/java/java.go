@@ -157,7 +157,7 @@ func NewAssembly() *Assembly {
 		"mediumtext": "String",
 		"text":       "String",
 		"longtext":   "String",
-		"blob":       "java.lang.byte[]",
+		"blob":       "byte[]",
 		"tinyblob":   "String",
 		"mediumblob": "String",
 		"longblob":   "String",
