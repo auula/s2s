@@ -19,53 +19,45 @@ THE SOFTWARE.
 package java
 
 import (
+	"errors"
 	"github.com/higker/s2s/core"
 	"github.com/higker/s2s/core/db"
 	"github.com/higker/s2s/core/lang"
+	"io"
+	"text/template"
 )
 
 var (
 	SourceByte = `
-public class User {
+package model
 
-    private Integer id;
+{{ range .Pkg }}
+import {{ . }};
+{{ end }}
 
-    private String account;
+public class {{ .StructName | ToCamelCase }} {
 
-    private String nickName;
+	{{ range .Columns }}
+	private {{ .Type }} {{ .Field }};
+	{{ end }}
 
-
-    public Integer getId() {
-        return id;
+	{{ range .Columns }}
+	public {{ .Type }} get{{ .Field | ToCamelCase}}() {
+        return {{ .Field }};
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void set{{ .Field | ToCamelCase}}({{ .Type }} {{ .Field }}) {
+        this.{{ .Field }} = {{ .Field }};
     }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
+	{{ end }}
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", account='" + account + '\'' +
-                ", nickName='" + nickName + '\'' +
-                '}';
+        return "{{ .StructName }}{" +
+				{{ range .Columns }}
+                "{{ .Field }}=" + {{ .Field }} + ","+
+				{{ end }}
+                "}";
     }
 }
 	`
@@ -126,9 +118,25 @@ func (jas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
 		})
 	}
 
+	return fieldColumn
+}
+
+func (jas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error {
+
+	if tabName == "" || len(cs) <= 0 {
+		return errors.New("table name info or []core.Field is empty")
+	}
+
+	// 生成模板准备解析
+	tpl := template.Must(template.New("s2s_java").Funcs(
+		template.FuncMap{
+			"ToCamelCase": core.CamelCaseFunc,
+		},
+	).Parse(string(jas.source)))
+
 	importPkg := make([]string, 0)
 
-	for _, field := range fieldColumn {
+	for _, field := range cs {
 		for i := range Imports {
 			if field.Type() == Imports[i].Kind {
 				importPkg = append(importPkg, Imports[i].Pkg)
@@ -136,7 +144,19 @@ func (jas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
 		}
 	}
 
-	return fieldColumn
+	type (
+		structure struct {
+			Pkg        []string
+			StructName string
+			Columns    []core.Field
+		}
+	)
+
+	return tpl.Execute(wr, structure{
+		Pkg:        importPkg,
+		StructName: tabName,
+		Columns:    cs,
+	})
 }
 
 func NewAssembly() *Assembly {
