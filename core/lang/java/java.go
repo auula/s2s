@@ -70,17 +70,19 @@ public class User {
 }
 	`
 	//{"BigInteger", "Boolean", "Date", "Timestamp", "Time","Float", "Double"}
-	Imports []*AutomaticImports
+	Imports = make([]*AutomaticImports, 7)
 )
 
 func init() {
-	Imports = append(Imports, &AutomaticImports{Kind: "Time", Pkg: "java.sql.Time"})
-	Imports = append(Imports, &AutomaticImports{Kind: "Date", Pkg: "java.sql.Date"})
-	Imports = append(Imports, &AutomaticImports{Kind: "Float", Pkg: "java.lang.Float"})
-	Imports = append(Imports, &AutomaticImports{Kind: "Double", Pkg: "java.lang.Double"})
-	Imports = append(Imports, &AutomaticImports{Kind: "Boolean", Pkg: "java.lang.Boolean"})
-	Imports = append(Imports, &AutomaticImports{Kind: "Timestamp", Pkg: "java.sql.Timestamp"})
-	Imports = append(Imports, &AutomaticImports{Kind: "BigInteger", Pkg: "java.math.BigInteger"})
+	Imports = []*AutomaticImports{
+		&AutomaticImports{Kind: "Time", Pkg: "java.sql.Time"},
+		&AutomaticImports{Kind: "Date", Pkg: "java.sql.Date"},
+		&AutomaticImports{Kind: "Float", Pkg: "java.lang.Float"},
+		&AutomaticImports{Kind: "Double", Pkg: "java.lang.Double"},
+		&AutomaticImports{Kind: "Boolean", Pkg: "java.lang.Boolean"},
+		&AutomaticImports{Kind: "Timestamp", Pkg: "java.sql.Timestamp"},
+		&AutomaticImports{Kind: "BigInteger", Pkg: "java.math.BigInteger"},
+	}
 }
 
 type AutomaticImports struct {
