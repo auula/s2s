@@ -27,6 +27,7 @@ import (
 )
 
 var (
+
 	// 驼峰英文转换函数
 	CamelCaseFunc = func(str string) string {
 		str = strings.Replace(str, "_", " ", -1)

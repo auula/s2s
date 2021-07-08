@@ -21,12 +21,13 @@ package cmd
 import (
 	"fmt"
 	"github.com/c-bata/go-prompt"
+	"github.com/higker/s2s/core/app"
 	"github.com/spf13/cobra"
 )
 
 var (
 	mode          string
-	comoandSymbol = "😃:cmd>"
+	commandSymbol = "😃:cmd>"
 )
 
 // consoleCmd represents the console command
@@ -35,9 +36,9 @@ var consoleCmd = &cobra.Command{
 	Short: "Console interaction",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-
+		fmt.Println(app.Info.Banner)
 		fmt.Println("Please select table.")
-		t := prompt.Input(comoandSymbol, completer)
+		t := prompt.Input(commandSymbol, completer)
 		fmt.Println("You selected " + t)
 
 		//structure := rust.New()

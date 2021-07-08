@@ -16,29 +16,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package cmd
 
-import (
-	"fmt"
-	"github.com/higker/s2s/core/app"
-	"runtime"
+package app
 
-	"github.com/fatih/color"
-	"github.com/spf13/cobra"
+import "github.com/fatih/color"
+
+const (
+	version = "0.0.1 Alpha"
+
+	banner = `
+	        ______        
+	.-----.|__    |.-----.
+	|__ --||    __||__ --|
+	|_____||______||_____|
+`
+
+	description = `
+S2S is a command-line database tool that can generate tables 
+with the type of Golang,Rust, Java language,with the command line.`
 )
 
-// versionCmd represents the version command
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Version info",
-	Long: color.RedString(`
-	version: view current application version.`),
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(fmt.Sprintf("OS: %s ARCH: %s", runtime.GOOS, runtime.GOARCH))
-		fmt.Println(fmt.Sprintf("S2S command line database tool %s ", app.Info.Version))
-	},
+var Info *S2SInfo = NewInfo()
+
+type S2SInfo struct {
+	Version, Banner, Description string
 }
 
-func init() {
-	rootCmd.AddCommand(versionCmd)
+func NewInfo() *S2SInfo {
+	return &S2SInfo{
+		Version:     color.YellowString(version),
+		Banner:      color.MagentaString(banner),
+		Description: color.MagentaString(banner) + color.GreenString(description),
+	}
 }
