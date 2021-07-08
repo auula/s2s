@@ -135,7 +135,7 @@ func NewAssembly() *Assembly {
 	var jas Assembly
 	jas.Lang = lang.Rust
 	jas.source = []byte(SourceByte)
-	jas.Table = map[string]string{
+	jas.Table = lang.TypeSystem{
 		"int":        "i32",
 		"tinyint":    "i8",
 		"smallint":   "i16",

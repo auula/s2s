@@ -131,7 +131,7 @@ func NewAssembly() *Assembly {
 	var gas Assembly
 	gas.Lang = lang.Golang
 	gas.source = SourceByte
-	gas.Table = map[string]string{
+	gas.Table = lang.TypeSystem{
 		"int":        "int32",
 		"tinyint":    "int8",
 		"smallint":   "int",

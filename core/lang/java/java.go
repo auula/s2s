@@ -159,7 +159,7 @@ func NewAssembly() *Assembly {
 	var jas Assembly
 	jas.Lang = lang.Java
 	jas.source = SourceByte
-	jas.Table = map[string]string{
+	jas.Table = lang.TypeSystem{
 		"int":        "Integer",
 		"tinyint":    "short",
 		"smallint":   "short",

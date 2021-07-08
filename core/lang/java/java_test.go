@@ -66,38 +66,6 @@ func TestGoAssembly_ToField(t *testing.T) {
 }
 
 func TestAssembly_Parse(t *testing.T) {
-	t.Log([]byte(`
-package model
 
-{{ range .Pkg }}
-import {{ . }};
-{{ end }}
-
-public class {{ .StructName | ToCamelCase }} {
-
-	{{ range .Columns }}
-	private {{ .Type }} {{ .Field }};
-	{{ end }}
-
-	{{ range .Columns }}
-	public {{ .Type }} get{{ .Field | ToCamelCase}}() {
-        return {{ .Field }};
-    }
-
-    public void set{{ .Field | ToCamelCase}}({{ .Type }} {{ .Field }}) {
-        this.{{ .Field }} = {{ .Field }};
-    }
-	{{ end }}
-
-    @Override
-    public String toString() {
-        return "{{ .StructName }}{" +
-				{{ range .Columns }}
-                "{{ .Field }}=" + {{ .Field }} + ","+
-				{{ end }}
-                "}";
-    }
-}
-	`))
 	structure.Parse(os.Stdout, "tableName", structure.ToField(tcs))
 }

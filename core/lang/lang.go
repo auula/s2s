@@ -16,7 +16,9 @@ const (
 	Golang
 )
 
+type TypeSystem map[string]string
+
 type DataType struct {
-	Table map[string]string
+	Table TypeSystem
 	Lang  Languages
 }
