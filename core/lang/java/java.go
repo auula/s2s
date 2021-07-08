@@ -57,22 +57,22 @@ var (
 		43, 32, 34, 44, 34, 43, 10, 9, 9, 9, 9, 123, 123, 32, 101, 110, 100, 32, 125, 125, 10, 32, 32, 32, 32, 32, 32, 32,
 		32, 32, 32, 32, 32, 32, 32, 32, 32, 34, 125, 34, 59, 10, 32, 32, 32, 32, 125, 10, 125, 10, 9}
 
-	Imports = make([]*AutomaticImports, 7)
+	Imports = make([]*Package, 7)
 )
 
 func init() {
-	Imports = []*AutomaticImports{
-		&AutomaticImports{Kind: "Time", Pkg: "java.sql.Time"},
-		&AutomaticImports{Kind: "Date", Pkg: "java.sql.Date"},
-		&AutomaticImports{Kind: "Float", Pkg: "java.lang.Float"},
-		&AutomaticImports{Kind: "Double", Pkg: "java.lang.Double"},
-		&AutomaticImports{Kind: "Boolean", Pkg: "java.lang.Boolean"},
-		&AutomaticImports{Kind: "Timestamp", Pkg: "java.sql.Timestamp"},
-		&AutomaticImports{Kind: "BigInteger", Pkg: "java.math.BigInteger"},
+	Imports = []*Package{
+		{Kind: "Time", Pkg: "java.sql.Time"},
+		{Kind: "Date", Pkg: "java.sql.Date"},
+		{Kind: "Float", Pkg: "java.lang.Float"},
+		{Kind: "Double", Pkg: "java.lang.Double"},
+		{Kind: "Boolean", Pkg: "java.lang.Boolean"},
+		{Kind: "Timestamp", Pkg: "java.sql.Timestamp"},
+		{Kind: "BigInteger", Pkg: "java.math.BigInteger"},
 	}
 }
 
-type AutomaticImports struct {
+type Package struct {
 	Kind string
 	Pkg  string
 }

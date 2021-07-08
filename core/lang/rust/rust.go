@@ -20,11 +20,12 @@ package rust
 
 import (
 	"errors"
+	"io"
+	"text/template"
+
 	"github.com/higker/s2s/core"
 	"github.com/higker/s2s/core/db"
 	"github.com/higker/s2s/core/lang"
-	"io"
-	"text/template"
 )
 
 var (
@@ -37,7 +38,7 @@ extern crate serde_derive;
 pub struct {{ .StructName | ToCamelCase}} {
 
 	{{ range .Columns }}
-	// {{ .Comment }}
+    // {{ .Comment }}
     #[serde(rename = "{{ .Field }}")]
     pub {{ .Field }}: {{ .Type }},
 	{{ end }}

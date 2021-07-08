@@ -5,10 +5,11 @@
 package rust_test
 
 import (
-	"github.com/higker/s2s/core/db"
-	"github.com/higker/s2s/core/lang/rust"
 	"os"
 	"testing"
+
+	"github.com/higker/s2s/core/db"
+	"github.com/higker/s2s/core/lang/rust"
 )
 
 var (
@@ -51,6 +52,5 @@ func TestGoAssembly_ToField(t *testing.T) {
 }
 
 func TestAssembly_Parse(t *testing.T) {
-
-	structure.Parse(os.Stdout, "UserInfo", structure.ToField(tcs))
+	structure.Parse(os.Stdout, "user_info", structure.ToField(tcs))
 }

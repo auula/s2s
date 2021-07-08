@@ -1,32 +1,32 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Copyright © 2021 Jarvib Ding <ding@ibyte.me>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 */
 package cmd
 
 import (
-	"github.com/higker/s2s/core/db"
-	"github.com/higker/s2s/core/lang/rust"
-	"log"
-	"os"
-
+	"fmt"
+	"github.com/c-bata/go-prompt"
 	"github.com/spf13/cobra"
 )
 
 var (
 	mode          string
-	comoandSymbol = "😃:shell>"
+	comoandSymbol = "😃:cmd>"
 )
 
 // consoleCmd represents the console command
@@ -36,25 +36,38 @@ var consoleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		structure := rust.New()
+		fmt.Println("Please select table.")
+		t := prompt.Input(comoandSymbol, completer)
+		fmt.Println("You selected " + t)
 
-		if err := structure.OpenDB(
-			&db.Info{
-				HostIPAndPort: os.Getenv("HostIPAndPort"), // 数据库IP
-				UserName:      "emp_db",                   // 数据库用户名
-				Password:      os.Getenv("Password"),      // 数据库密码
-				Type:          db.MySQL,                   // 数据库类型 PostgreSQL Oracle
-				Charset:       "utf8",
-			},
-		); err != nil {
-			log.Println(err)
-		}
-
-		defer structure.Close()
-
-		// 结果输出到标准输出   "数据库名"   "表名"
-		structure.Parse(os.Stdout, "emp_db", "user_info")
+		//structure := rust.New()
+		//
+		//if err := structure.OpenDB(
+		//	&db.Info{
+		//		HostIPAndPort: os.Getenv("HostIPAndPort"), // 数据库IP
+		//		UserName:      "emp_db",                   // 数据库用户名
+		//		Password:      os.Getenv("Password"),      // 数据库密码
+		//		Type:          db.MySQL,                   // 数据库类型 PostgreSQL Oracle
+		//		Charset:       "utf8",
+		//	},
+		//); err != nil {
+		//	log.Println(err)
+		//}
+		//
+		//defer structure.Close()
+		//
+		//// 结果输出到标准输出   "数据库名"   "表名"
+		//structure.Parse(os.Stdout, "emp_db", "user_info")
 	},
+}
+
+func completer(d prompt.Document) []prompt.Suggest {
+	s := []prompt.Suggest{
+		{Text: "users", Description: "Store the username and age"},
+		{Text: "articles", Description: "Store the article text posted by user"},
+		{Text: "comments", Description: "Store the text commented to articles"},
+	}
+	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }
 
 func init() {
