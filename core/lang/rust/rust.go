@@ -29,34 +29,19 @@ import (
 
 var (
 	SourceByte = `
-// Example code that deserializes and serializes the model.
-// extern crate serde;
-// #[macro_use]
-// extern crate serde_derive;
-// extern crate serde_json;
-//
-// use generated_module::[object Object];
-//
-// fn main() {
-//     let json = r#"{"answer": 42}"#;
-//     let model: [object Object] = serde_json::from_str(&json).unwrap();
-// }
+// Special type view: https://docs.rs/chrono
 
 extern crate serde_derive;
 
 #[derive(Serialize, Deserialize)]
-pub struct ResponseBody {
-    #[serde(rename = "code")]
-    pub code: i64,
+pub struct {{ .StructName | ToCamelCase}} {
 
-    #[serde(rename = "msg")]
-    pub msg: String,
+	{{ range .Columns }}
+	// {{ .Comment }}
+    #[serde(rename = "{{ .Field }}")]
+    pub {{ .Field }}: {{ .Type }},
+	{{ end }}
 
-    #[serde(rename = "data")]
-    pub data: Data,
-
-    #[serde(rename = "author")]
-    pub author: Author,
 }
 `
 )
@@ -155,10 +140,10 @@ func NewAssembly() *Assembly {
 		"tinyblob":   "String",
 		"mediumblob": "String",
 		"longblob":   "String",
-		"date":       "Date",
+		"date":       "chrono::NaiveDate",
 		"datetime":   "chrono::NaiveDateTime",
-		"timestamp":  "Timestamp",
-		"time":       "Time",
+		"timestamp":  "chrono::NaiveDateTime",
+		"time":       "chrono::NaiveTime",
 		"float":      "f32",
 		"double":     "f64",
 	}
