@@ -19,7 +19,9 @@ THE SOFTWARE.
 
 package app
 
-import "github.com/fatih/color"
+import (
+	"github.com/fatih/color"
+)
 
 const (
 	version = "0.0.1 Alpha"

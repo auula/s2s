@@ -18,7 +18,9 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/higker/s2s/cmd"
+import (
+	"github.com/higker/s2s/cmd"
+)
 
 func main() {
 	cmd.Execute()
