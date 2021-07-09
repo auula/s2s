@@ -24,6 +24,7 @@ import (
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/app"
 	"github.com/higker/s2s/core/commands"
+	"github.com/higker/s2s/core/emoji"
 	"github.com/spf13/cobra"
 )
 
@@ -39,11 +40,13 @@ var consoleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(app.Info.Banner)
-		fmt.Println("Please select table.")
-		t := prompt.Input(commandSymbol, completer)
-		fmt.Println("You selected " + t)
-
-		commands.Execute["tables"](args)
+		fmt.Println()
+		emoji.Success("You have entered the command line mode!")
+		for {
+			emoji.Info("Press the 'tab' key to get a prompt ")
+			t := prompt.Input(commandSymbol, completer)
+			commands.ParseInput(t, args)
+		}
 
 		//structure := rust.New()
 		//
@@ -64,6 +67,15 @@ var consoleCmd = &cobra.Command{
 		//// 结果输出到标准输出   "数据库名"   "表名"
 		//structure.Parse(os.Stdout, "emp_db", "user_info")
 	},
+}
+
+func completer(d prompt.Document) []prompt.Suggest {
+	s := []prompt.Suggest{
+		{Text: "tables", Description: "Show tables infomation command."},
+		{Text: "databases", Description: "Show database infomation command."},
+		{Text: "use", Description: "Database of select using."},
+	}
+	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }
 
 func init() {

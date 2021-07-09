@@ -16,51 +16,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-
-package commands
+package emoji
 
 import (
 	"fmt"
 
-	"github.com/higker/s2s/core/emoji"
+	"github.com/fatih/color"
 )
 
-type (
-	Command func(args []string) error
+const (
+	Mark       = "⚠️"
+	Programmer = "🤖‍"
+	Cry        = "😭"
+	Cheer      = "🥳"
 )
 
-var (
-	Use = func(args []string) error {
-		return nil
-	}
-	Tables = func(args []string) error {
-		fmt.Println("tables")
-		return nil
-	}
-	Database = func(args []string) error {
-		return nil
-	}
-	Generate = func(args []string) error {
-		return nil
-	}
-	Execute = map[string]Command{
-		"use":       Use,
-		"tables":    Tables,
-		"databases": Database,
-		"generate":  Generate,
-	}
-)
+func Info(msg string) {
+	fmt.Println(fmt.Sprintf("%s: %s .", Programmer, color.YellowString(msg)))
+	fmt.Println()
+}
 
-func ParseInput(cmd string, agrs []string) {
-	switch cmd {
-	case "tables":
-		Execute[cmd](agrs)
-	case "databases":
-		Execute[cmd](agrs)
-	case "use":
-		Execute[cmd](agrs)
-	default:
-		fmt.Println()
-		emoji.Error("Currently do not support commands you entered")
-	}
+func Error(msg string) {
+	fmt.Println(fmt.Sprintf("%s: %s .", Cry, color.RedString(msg)))
+	fmt.Println()
+}
+
+func Success(msg string) {
+	fmt.Println(fmt.Sprintf("%s: %s .", Cheer, color.GreenString(msg)))
 }
