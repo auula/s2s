@@ -26,23 +26,23 @@ type (
 )
 
 var (
-	UseCmd = func(args []string) error {
+	Use = func(args []string) error {
 		return nil
 	}
-	TablesCmd = func(args []string) error {
+	Tables = func(args []string) error {
 		fmt.Println("tables")
 		return nil
 	}
-	DatabaseCmd = func(args []string) error {
+	Database = func(args []string) error {
 		return nil
 	}
-	GenerateCmd = func(args []string) error {
+	Generate = func(args []string) error {
 		return nil
 	}
 	Execute = map[string]Command{
-		"use":       UseCmd,
-		"tables":    TablesCmd,
-		"databases": DatabaseCmd,
-		"generate":  GenerateCmd,
+		"use":       Use,
+		"tables":    Tables,
+		"databases": Database,
+		"generate":  Generate,
 	}
 )
