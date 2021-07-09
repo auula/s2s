@@ -19,15 +19,16 @@ THE SOFTWARE.
 package core
 
 import (
-	"github.com/higker/s2s/core/db"
 	"io"
 	"strings"
+
+	"github.com/c-bata/go-prompt"
+	"github.com/higker/s2s/core/db"
 
 	"github.com/higker/s2s/core/db/mysql"
 )
 
 var (
-
 	// 驼峰英文转换函数
 	CamelCaseFunc = func(str string) string {
 		str = strings.Replace(str, "_", " ", -1)
@@ -58,8 +59,6 @@ type Structure struct {
 	db       db.DataBase
 }
 
-type Agrs struct{}
-
 func (s *Structure) OpenDB(info *db.Info) error {
 
 	switch info.Type {
@@ -88,4 +87,13 @@ func (s *Structure) Parse(wr io.Writer, dbName, tabName string) error {
 		return err
 	}
 	return s.assembly.Parse(wr, tabName, s.assembly.ToField(columns))
+}
+
+func completer(d prompt.Document) []prompt.Suggest {
+	s := []prompt.Suggest{
+		{Text: "tables", Description: "Show tables infomation command."},
+		{Text: "databases", Description: "Show database infomation command."},
+		{Text: "use", Description: "Database of select using."},
+	}
+	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }

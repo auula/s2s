@@ -20,8 +20,10 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/app"
+	"github.com/higker/s2s/funcs"
 	"github.com/spf13/cobra"
 )
 
@@ -40,6 +42,8 @@ var consoleCmd = &cobra.Command{
 		fmt.Println("Please select table.")
 		t := prompt.Input(commandSymbol, completer)
 		fmt.Println("You selected " + t)
+
+		funcs.Execute["tables"](args)
 
 		//structure := rust.New()
 		//
@@ -64,9 +68,9 @@ var consoleCmd = &cobra.Command{
 
 func completer(d prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
-		{Text: "users", Description: "Store the username and age"},
-		{Text: "articles", Description: "Store the article text posted by user"},
-		{Text: "comments", Description: "Store the text commented to articles"},
+		{Text: "show tables", Description: "Show tables infomation command."},
+		{Text: "show databases", Description: "Show database infomation command."},
+		{Text: "use", Description: "Database of select using."},
 	}
 	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }
