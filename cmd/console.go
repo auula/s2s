@@ -23,7 +23,7 @@ import (
 
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/app"
-	"github.com/higker/s2s/funcs"
+	"github.com/higker/s2s/core/funcs"
 	"github.com/spf13/cobra"
 )
 
