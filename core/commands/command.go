@@ -19,7 +19,11 @@ THE SOFTWARE.
 
 package commands
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/c-bata/go-prompt"
+)
 
 type (
 	Command func(args []string) error
@@ -46,3 +50,26 @@ var (
 		"generate":  Generate,
 	}
 )
+
+func ParseInput(cmd string, agrs []string) error {
+	switch cmd {
+	case "tables":
+		Execute[cmd](agrs)
+	case "databases":
+		Execute[cmd](agrs)
+	case "use":
+		Execute[cmd](agrs)
+	default:
+		return nil
+	}
+	return nil
+}
+
+func completer(d prompt.Document) []prompt.Suggest {
+	s := []prompt.Suggest{
+		{Text: "tables", Description: "Show tables infomation command."},
+		{Text: "databases", Description: "Show database infomation command."},
+		{Text: "use", Description: "Database of select using."},
+	}
+	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
+}

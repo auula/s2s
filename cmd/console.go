@@ -66,15 +66,6 @@ var consoleCmd = &cobra.Command{
 	},
 }
 
-func completer(d prompt.Document) []prompt.Suggest {
-	s := []prompt.Suggest{
-		{Text: "show tables", Description: "Show tables infomation command."},
-		{Text: "show databases", Description: "Show database infomation command."},
-		{Text: "use", Description: "Database of select using."},
-	}
-	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
-}
-
 func init() {
 	rootCmd.AddCommand(consoleCmd)
 
