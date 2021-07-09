@@ -23,7 +23,7 @@ import (
 
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/app"
-	"github.com/higker/s2s/core/funcs"
+	"github.com/higker/s2s/core/commands"
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +43,7 @@ var consoleCmd = &cobra.Command{
 		t := prompt.Input(commandSymbol, completer)
 		fmt.Println("You selected " + t)
 
-		funcs.Execute["tables"](args)
+		commands.Execute["tables"](args)
 
 		//structure := rust.New()
 		//
