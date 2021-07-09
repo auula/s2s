@@ -26,6 +26,9 @@ type (
 )
 
 var (
+	UseCmd = func(args []string) error {
+		return nil
+	}
 	TablesCmd = func(args []string) error {
 		fmt.Println("tables")
 		return nil
@@ -33,12 +36,13 @@ var (
 	DatabaseCmd = func(args []string) error {
 		return nil
 	}
-	UseCmd = func(args []string) error {
+	GenerateCmd = func(args []string) error {
 		return nil
 	}
 	Execute = map[string]Command{
+		"use":       UseCmd,
 		"tables":    TablesCmd,
 		"databases": DatabaseCmd,
-		"use":       UseCmd,
+		"generate":  GenerateCmd,
 	}
 )
