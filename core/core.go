@@ -103,6 +103,6 @@ func New() *Structure {
 	return sts
 }
 
-func (sts *Structure) DataBases() []string {
-	return nil
+func (sts *Structure) DataBases() ([]string, error) {
+	return sts.db.DataBases()
 }

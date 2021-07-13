@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 
+	_ "github.com/go-sql-driver/mysql" // 引入mysql驱动
 	"github.com/higker/s2s/core/db"
 )
 

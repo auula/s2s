@@ -20,11 +20,14 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/app"
-	"github.com/higker/s2s/core/commands"
+	"github.com/higker/s2s/core/db"
 	"github.com/higker/s2s/core/emoji"
+	"github.com/higker/s2s/core/lang/java"
 	"github.com/spf13/cobra"
 )
 
@@ -42,29 +45,33 @@ var consoleCmd = &cobra.Command{
 		fmt.Println(app.Info.Banner)
 		fmt.Println()
 		emoji.Success("You have entered the command line mode!")
-		for {
-			emoji.Info("Press the 'tab' key to get a prompt ")
-			t := prompt.Input(commandSymbol, completer)
-			commands.ParseInput(t, args)
+		// for {
+		// 	emoji.Info("Press the 'tab' key to get a prompt ")
+		// 	t := prompt.Input(commandSymbol, completer)
+		// 	commands.ParseInput(t, args)
+		// }
+
+		structure := java.New()
+
+		if err := structure.OpenDB(
+			&db.Info{
+				HostIPAndPort: os.Getenv("HostIPAndPort"), // 数据库IP
+				UserName:      "root",                     // 数据库用户名
+				Password:      os.Getenv("Password"),      // 数据库密码
+				Type:          db.MySQL,                   // 数据库类型 PostgreSQL Oracle
+				Charset:       "utf8",
+			},
+		); err != nil {
+			log.Println(err)
 		}
 
-		//structure := rust.New()
-		//
-		//if err := structure.OpenDB(
-		//	&db.Info{
-		//		HostIPAndPort: os.Getenv("HostIPAndPort"), // 数据库IP
-		//		UserName:      "emp_db",                   // 数据库用户名
-		//		Password:      os.Getenv("Password"),      // 数据库密码
-		//		Type:          db.MySQL,                   // 数据库类型 PostgreSQL Oracle
-		//		Charset:       "utf8",
-		//	},
-		//); err != nil {
-		//	log.Println(err)
-		//}
-		//
-		//defer structure.Close()
-		//
-		//// 结果输出到标准输出   "数据库名"   "表名"
+		defer structure.Close()
+		ds, err := structure.DataBases()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(ds)
+		// 结果输出到标准输出   "数据库名"   "表名"
 		//structure.Parse(os.Stdout, "emp_db", "user_info")
 	},
 }

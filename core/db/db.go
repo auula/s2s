@@ -2,12 +2,10 @@
 // Author: Jaco Ding <deen.job@qq.com>
 // Date: 2021/7/6 - 4:11 下午 - UTC/GMT+08:00
 
-
-
 package db
 
 type (
-	Type    int8
+	Type int8
 )
 
 const (
@@ -27,13 +25,12 @@ type Info struct {
 	Type          Type
 }
 
-
-
 type DataBase interface {
 	Type() Type
 	Close() error
 	Connect() error
 	SetInfo(info *Info)
+	DataBases() ([]string, error)
 	GetColumns(dbName, tabName string) ([]*TableColumn, error)
 }
 
