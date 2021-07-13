@@ -76,7 +76,7 @@ func (d *DB) GetColumns(dbName, tableName string) ([]*db.TableColumn, error) {
 	var columns []*db.TableColumn
 	for rows.Next() {
 		var column db.TableColumn
-		err := rows.Scan(&column.ColumnName, &column.ColumnType, &column.ColumnKey, &column.IsNullable, &column.ColumnType, &column.ColumnComment)
+		err := rows.Scan(&column.ColumnName, &column.DataType, &column.ColumnKey, &column.IsNullable, &column.ColumnType, &column.ColumnComment)
 		if err != nil {
 			return nil, err
 		}

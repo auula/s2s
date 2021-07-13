@@ -10,6 +10,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/scylladb/termtables v1.0.0 // indirect
+	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/spf13/cobra v1.2.0
 	github.com/spf13/viper v1.8.1
 )

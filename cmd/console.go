@@ -72,7 +72,7 @@ var consoleCmd = &cobra.Command{
 		}
 		fmt.Println(ds)
 		// 结果输出到标准输出   "数据库名"   "表名"
-		//structure.Parse(os.Stdout, "emp_db", "user_info")
+		structure.Parse(os.Stdout, "emp_db", "user_info")
 	},
 }
 
