@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 JarvibDing
+Copyright © 2021 Jarvib Ding
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,83 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/higker/s2s/core/app"
 	"os"
 
-	"github.com/spf13/cobra"
+	"github.com/apcera/termtables"
+	"github.com/c-bata/go-prompt"
+	"github.com/higker/s2s/core"
+	"github.com/higker/s2s/core/app"
+	"github.com/higker/s2s/core/emoji"
 
-	homedir "github.com/mitchellh/go-homedir"
-	"github.com/spf13/viper"
+	"github.com/spf13/cobra"
 )
 
-var cfgFile string
+type (
+	Command func(args []string, sts *core.Structure) error
+)
+
+var (
+	Use = func(args []string, sts *core.Structure) error {
+		return nil
+	}
+	Tables = func(args []string, sts *core.Structure) error {
+		fmt.Println("tables")
+		return nil
+	}
+	Database = func(args []string, sts *core.Structure) error {
+		t := termtables.CreateTable()
+		t.AddHeaders("*", "Database")
+		ds, err := sts.DataBases()
+		if err != nil {
+			return err
+		}
+		for i, v := range ds {
+			t.AddRow(i+1, v)
+		}
+		fmt.Println(t.Render())
+		return nil
+	}
+	Generate = func(args []string, sts *core.Structure) error {
+
+		return nil
+	}
+	shell = map[string]Command{
+		"use":       Use,
+		"tables":    Tables,
+		"databases": Database,
+		"generate":  Generate,
+	}
+)
+
+func ParseInput(cmd string, agrs []string, sts *core.Structure) {
+	switch cmd {
+	case "tables":
+		shell[cmd](agrs, sts)
+	case "databases":
+		shell[cmd](agrs, sts)
+	case "use":
+		shell[cmd](agrs, sts)
+	case "EXIT":
+		fallthrough
+	case "exit":
+		emoji.Info("Bye!")
+		os.Exit(0)
+	default:
+		fmt.Println()
+		emoji.Error("Currently do not support commands you entered！！！")
+	}
+}
+
+func shellPrompt(d prompt.Document) []prompt.Suggest {
+	s := []prompt.Suggest{
+		{Text: "tables", Description: "Show tables infomation command."},
+		{Text: "databases", Description: "Show database infomation command."},
+		{Text: "use", Description: "Database of select using."},
+	}
+	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
+}
+
+// var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -51,38 +118,38 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	//cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.s2s.yaml)")
+	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.s2s.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		cobra.CheckErr(err)
+// func initConfig() {
+// 	if cfgFile != "" {
+// 		// Use config file from the flag.
+// 		viper.SetConfigFile(cfgFile)
+// 	} else {
+// 		// Find home directory.
+// 		home, err := homedir.Dir()
+// 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".s2s" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".s2s")
-	}
+// 		// Search config in home directory with name ".s2s" (without extension).
+// 		viper.AddConfigPath(home)
+// 		viper.SetConfigName(".s2s")
+// 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+// 	viper.AutomaticEnv() // read in environment variables that match
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-	}
-}
+// 	// If a config file is found, read it in.
+// 	if err := viper.ReadInConfig(); err == nil {
+// 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+// 	}
+// }

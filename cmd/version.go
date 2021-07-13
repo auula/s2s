@@ -20,8 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/higker/s2s/core/app"
 	"runtime"
+
+	"github.com/higker/s2s/core/app"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -34,6 +35,7 @@ var versionCmd = &cobra.Command{
 	Long: color.RedString(`
 	version: view current application version.`),
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(app.Info.Banner)
 		fmt.Println(fmt.Sprintf("OS: %s ARCH: %s", runtime.GOOS, runtime.GOARCH))
 		fmt.Println(fmt.Sprintf("S2S command line database tool %s ", app.Info.Version))
 	},

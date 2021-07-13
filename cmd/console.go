@@ -20,7 +20,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/c-bata/go-prompt"
@@ -32,7 +31,7 @@ import (
 )
 
 var (
-	mode          string
+	lang          string
 	commandSymbol = "😃:shell>"
 )
 
@@ -57,20 +56,17 @@ var consoleCmd = &cobra.Command{
 			&db.Info{
 				HostIPAndPort: os.Getenv("HostIPAndPort"), // 数据库IP
 				UserName:      "root",                     // 数据库用户名
-				Password:      os.Getenv("Password"),      // 数据库密码
+				Password:      os.Getenv(""),              // 数据库密码
 				Type:          db.MySQL,                   // 数据库类型 PostgreSQL Oracle
 				Charset:       "utf8",
 			},
 		); err != nil {
-			log.Println(err)
+			emoji.Error("Database Establishment Connection Fails, please detect configuration information!ment Connection Fails, please detect configuration information!ment Connection Fails, please detect configuration information!ment Connection Fails, please detect configuration information!")
+			return
 		}
 
 		defer structure.Close()
-		ds, err := structure.DataBases()
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(ds)
+
 		// 结果输出到标准输出   "数据库名"   "表名"
 		structure.Parse(os.Stdout, "emp_db", "user_info")
 	},
@@ -88,13 +84,4 @@ func completer(d prompt.Document) []prompt.Suggest {
 func init() {
 	rootCmd.AddCommand(consoleCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// consoleCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// consoleCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
