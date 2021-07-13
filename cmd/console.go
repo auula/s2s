@@ -30,7 +30,7 @@ import (
 
 var (
 	mode          string
-	commandSymbol = "😃:cmd>"
+	commandSymbol = "😃:shell>"
 )
 
 // consoleCmd represents the console command

@@ -22,6 +22,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+
 	"github.com/higker/s2s/core/db"
 )
 
@@ -83,4 +84,23 @@ func (d *DB) GetColumns(dbName, tableName string) ([]*db.TableColumn, error) {
 	}
 
 	return columns, nil
+}
+
+func (d *DB) DataBases() ([]string, error) {
+	rows, err := d.source.Query("show databases")
+	if err != nil {
+		return nil, err
+	}
+	if rows == nil {
+		return nil, errors.New("no data")
+	}
+	var databases []string
+	for rows.Next() {
+		var database string
+		if err := rows.Scan(&database); err != nil {
+			return nil, err
+		}
+		databases = append(databases, database)
+	}
+	return databases, nil
 }

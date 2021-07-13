@@ -97,3 +97,12 @@ func completer(d prompt.Document) []prompt.Suggest {
 	}
 	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }
+
+func New() *Structure {
+	sts := new(Structure)
+	return sts
+}
+
+func (sts *Structure) DataBases() []string {
+	return nil
+}
