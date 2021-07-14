@@ -44,11 +44,6 @@ var consoleCmd = &cobra.Command{
 		fmt.Println(app.Info.Banner)
 		fmt.Println()
 		emoji.Success("You have entered the command line mode!")
-		// for {
-		// 	emoji.Info("Press the 'tab' key to get a prompt ")
-		// 	t := prompt.Input(commandSymbol, completer)
-		// 	commands.ParseInput(t, args)
-		// }
 
 		structure := java.New()
 

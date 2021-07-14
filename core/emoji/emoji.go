@@ -32,15 +32,18 @@ const (
 )
 
 func Info(msg string) {
-	fmt.Println(fmt.Sprintf("%s: %s", Programmer, color.YellowString(msg)))
 	fmt.Println()
+	fmt.Println(fmt.Sprintf("%s: %s", Programmer, color.YellowString(msg)))
+
 }
 
 func Error(msg string) {
-	fmt.Println(fmt.Sprintf("%s: %s", Cry, color.RedString(msg)))
 	fmt.Println()
+	fmt.Println(fmt.Sprintf("%s: %s", Cry, color.RedString(msg)))
+
 }
 
 func Success(msg string) {
+	fmt.Println()
 	fmt.Println(fmt.Sprintf("%s: %s", Cheer, color.GreenString(msg)))
 }

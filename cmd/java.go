@@ -18,6 +18,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/app"
@@ -31,7 +32,9 @@ import (
 var javaCmd = &cobra.Command{
 	Use:   "java",
 	Short: "Generate Java code",
-	Long:  `Produce Java code mapping according to database table.`,
+	Long: `
+  Produce Java code mapping according to database table.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(app.Info.Banner)
 		fmt.Println()
@@ -56,7 +59,11 @@ var javaCmd = &cobra.Command{
 		emoji.Success("Press the 'tab' key to get a prompt！")
 		emoji.Success("Enter `exit` to exit the program!")
 		for {
+			fmt.Println()
 			t := prompt.Input(commandSymbol, shellPrompt)
+			if len(strings.TrimSpace(t)) <= 0 {
+				continue
+			}
 			ParseInput(t, args, structure)
 		}
 	},

@@ -24,6 +24,8 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
 
 	"github.com/apcera/termtables"
 	"github.com/c-bata/go-prompt"
@@ -79,24 +81,57 @@ func ParseInput(cmd string, agrs []string, sts *core.Structure) {
 		shell[cmd](agrs, sts)
 	case "use":
 		shell[cmd](agrs, sts)
+	case "clear":
+		clearFunc()
 	case "EXIT":
 		fallthrough
 	case "exit":
-		emoji.Info("Bye!")
+		emoji.Info("Bye👋 :)")
 		os.Exit(0)
 	default:
-		fmt.Println()
 		emoji.Error("Currently do not support commands you entered！！！")
 	}
 }
 
 func shellPrompt(d prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
-		{Text: "tables", Description: "Show tables infomation command."},
-		{Text: "databases", Description: "Show database infomation command."},
-		{Text: "use", Description: "Database of select using."},
+		{Text: "tables", Description: "Displays the current database of all table names."},
+		{Text: "databases", Description: "Displays a list of all the database names."},
+		{Text: "use", Description: "Specify the database name used."},
+		{Text: "exit", Description: "Enter `exit` to exit the program."},
+		{Text: "clear", Description: "Content on the clean-up screen."},
 	}
 	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
+}
+
+var clear map[string]func() //create a map for storing clear funcs
+
+func init() {
+	clear = make(map[string]func()) //Initialize it
+	clear["linux"] = func() {
+		cmd := exec.Command("clear") //Linux example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+	clear["darwin"] = func() {
+		cmd := exec.Command("clear") //Linux example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+	clear["windows"] = func() {
+		cmd := exec.Command("cmd", "/c", "cls") //Windows example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+}
+
+func clearFunc() {
+	value, ok := clear[runtime.GOOS] //runtime.GOOS -> linux, windows, darwin etc.
+	if ok {                          //if we defined a clear func for that platform:
+		value() //we execute it
+	} else { //unsupported platform
+		panic("Your platform is unsupported! I can't clear terminal screen :(")
+	}
 }
 
 // var cfgFile string
