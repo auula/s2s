@@ -106,3 +106,11 @@ func New() *Structure {
 func (sts *Structure) DataBases() ([]string, error) {
 	return sts.db.DataBases()
 }
+
+func (sts *Structure) Tables() ([]string, error) {
+	return sts.db.Tables()
+}
+
+func (sts *Structure) SetSchema(schema string) {
+	sts.db.SetSchema(schema)
+}

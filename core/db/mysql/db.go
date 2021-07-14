@@ -28,8 +28,9 @@ import (
 )
 
 type DB struct {
-	source *sql.DB
-	info   *db.Info
+	tableSchema string
+	source      *sql.DB
+	info        *db.Info
 }
 
 func New() db.DataBase {
@@ -61,6 +62,10 @@ func (db *DB) SetInfo(info *db.Info) {
 
 func (db *DB) Close() error {
 	return db.source.Close()
+}
+
+func (d *DB) SetSchema(schema string) {
+	d.tableSchema = schema
 }
 
 func (d *DB) GetColumns(dbName, tableName string) ([]*db.TableColumn, error) {
@@ -104,4 +109,27 @@ func (d *DB) DataBases() ([]string, error) {
 		databases = append(databases, database)
 	}
 	return databases, nil
+}
+
+func (d *DB) Tables() ([]string, error) {
+	if d.tableSchema == "" {
+		return nil, errors.New("You do not choose which database, 👉 `use database` ")
+	}
+	rows, err := d.source.Query("select TABLE_NAME from information_schema.tables where table_schema = ?", d.tableSchema)
+	if err != nil {
+		return nil, err
+	}
+	if rows == nil {
+		return nil, errors.New("no data")
+	}
+
+	var tables []string
+	for rows.Next() {
+		var TableName string
+		if err := rows.Scan(&TableName); err != nil {
+			return nil, err
+		}
+		tables = append(tables, TableName)
+	}
+	return tables, nil
 }

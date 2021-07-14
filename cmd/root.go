@@ -36,22 +36,37 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type Args struct {
+	args []string
+	sts  *core.Structure
+}
+
 type (
-	Command func(args []string, sts *core.Structure) error
+	Command func(args *Args) error
 )
 
 var (
-	Use = func(args []string, sts *core.Structure) error {
+	Use = func(args *Args) error {
+		args.sts.SetSchema(args.args[0])
 		return nil
 	}
-	Tables = func(args []string, sts *core.Structure) error {
-		fmt.Println("tables")
+	Tables = func(args *Args) error {
+		t := termtables.CreateTable()
+		t.AddHeaders("*", "Tables")
+		ts, err := args.sts.Tables()
+		if err != nil {
+			return err
+		}
+		for i, v := range ts {
+			t.AddRow(i+1, v)
+		}
+		fmt.Println(t.Render())
 		return nil
 	}
-	Database = func(args []string, sts *core.Structure) error {
+	Database = func(args *Args) error {
 		t := termtables.CreateTable()
 		t.AddHeaders("*", "Database")
-		ds, err := sts.DataBases()
+		ds, err := args.sts.DataBases()
 		if err != nil {
 			return err
 		}
@@ -61,7 +76,7 @@ var (
 		fmt.Println(t.Render())
 		return nil
 	}
-	Generate = func(args []string, sts *core.Structure) error {
+	Generate = func(args *Args) error {
 
 		return nil
 	}
@@ -73,14 +88,21 @@ var (
 	}
 )
 
-func ParseInput(cmd string, agrs []string, sts *core.Structure) {
+func ParseInput(cmd string, args *Args) {
 	switch cmd {
 	case "tables":
-		shell[cmd](agrs, sts)
+		if err := shell[cmd](args); err != nil {
+			emoji.Error(err.Error())
+		}
 	case "databases":
-		shell[cmd](agrs, sts)
+		if err := shell[cmd](args); err != nil {
+			emoji.Error(err.Error())
+		}
 	case "use":
-		shell[cmd](agrs, sts)
+		if err := shell[cmd](args); err != nil {
+			emoji.Error(err.Error())
+		}
+		emoji.Info(fmt.Sprintf("Selected as database 👉 `%s`！", args.args[0]))
 	case "clear":
 		clearFunc()
 	case "EXIT":
@@ -134,16 +156,11 @@ func clearFunc() {
 	}
 }
 
-// var cfgFile string
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "s2s",
 	Short: "s2s is a command line database tool",
 	Long:  app.Info.Description,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -151,40 +168,3 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
-
-func init() {
-	//cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.s2s.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-// initConfig reads in config file and ENV variables if set.
-// func initConfig() {
-// 	if cfgFile != "" {
-// 		// Use config file from the flag.
-// 		viper.SetConfigFile(cfgFile)
-// 	} else {
-// 		// Find home directory.
-// 		home, err := homedir.Dir()
-// 		cobra.CheckErr(err)
-
-// 		// Search config in home directory with name ".s2s" (without extension).
-// 		viper.AddConfigPath(home)
-// 		viper.SetConfigName(".s2s")
-// 	}
-
-// 	viper.AutomaticEnv() // read in environment variables that match
-
-// 	// If a config file is found, read it in.
-// 	if err := viper.ReadInConfig(); err == nil {
-// 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-// 	}
-// }

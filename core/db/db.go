@@ -30,6 +30,8 @@ type DataBase interface {
 	Close() error
 	Connect() error
 	SetInfo(info *Info)
+	SetSchema(schema string)
+	Tables() ([]string, error)
 	DataBases() ([]string, error)
 	GetColumns(dbName, tabName string) ([]*TableColumn, error)
 }

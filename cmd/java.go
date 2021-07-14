@@ -64,7 +64,10 @@ var javaCmd = &cobra.Command{
 			if len(strings.TrimSpace(t)) <= 0 {
 				continue
 			}
-			ParseInput(t, args, structure)
+			ParseInput(strings.Split(t, " ")[0], &Args{
+				sts:  structure,
+				args: strings.Split(t, " ")[1:],
+			})
 		}
 	},
 }
