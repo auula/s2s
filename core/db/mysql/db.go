@@ -68,8 +68,8 @@ func (d *DB) SetSchema(schema string) {
 	d.tableSchema = schema
 }
 
-func (d *DB) GetColumns(dbName, tableName string) ([]*db.TableColumn, error) {
-	rows, err := d.source.Query(db.QuerySQL, dbName, tableName)
+func (d *DB) GetColumns(tableName string) ([]*db.TableColumn, error) {
+	rows, err := d.source.Query(db.QuerySQL, d.tableSchema, tableName)
 	if err != nil {
 		return nil, err
 	}

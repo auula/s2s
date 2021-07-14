@@ -80,8 +80,8 @@ func (s *Structure) SetLang(ass Assembly) {
 	s.assembly = ass
 }
 
-func (s *Structure) Parse(wr io.Writer, dbName, tabName string) error {
-	columns, err := s.db.GetColumns(dbName, tabName)
+func (s *Structure) Parse(wr io.Writer, tabName string) error {
+	columns, err := s.db.GetColumns(tabName)
 	if err != nil {
 		return err
 	}

@@ -81,7 +81,7 @@ var (
 		return nil
 	}
 	Generate = func(args *Args) error {
-
+		args.sts.Parse(os.Stdout, args.args[1])
 		return nil
 	}
 	shell = map[string]Command{
@@ -107,6 +107,10 @@ func ParseInput(cmd string, args *Args) {
 			emoji.Error(err.Error())
 		} else {
 			emoji.Info(fmt.Sprintf("Selected as database 👉 `%s`！", args.args[1]))
+		}
+	case "gen":
+		if err := shell["generate"](args); err != nil {
+			emoji.Error(err.Error())
 		}
 	case "clear":
 		clearFunc()

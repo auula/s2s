@@ -33,7 +33,7 @@ type DataBase interface {
 	SetSchema(schema string)
 	Tables() ([]string, error)
 	DataBases() ([]string, error)
-	GetColumns(dbName, tabName string) ([]*TableColumn, error)
+	GetColumns(tabName string) ([]*TableColumn, error)
 }
 
 type TableColumn struct {

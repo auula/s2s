@@ -40,7 +40,7 @@ var (
 	public class {{ .StructName | ToCamelCase }} {
 	
 		{{ range .Columns }}
-		private {{ .Type }} {{ .Field }};
+		private {{ .Type }} {{ .Field | ToCamelCase }};
 		{{ end }}
 	
 		{{ range .Columns }}
@@ -48,8 +48,8 @@ var (
 			return {{ .Field }};
 		}
 	
-		public void set{{ .Field | ToCamelCase}}({{ .Type }} {{ .Field }}) {
-			this.{{ .Field }} = {{ .Field }};
+		public void set{{ .Field | ToCamelCase}}({{ .Type }} {{ .Field | ToCamelCase}}) {
+			this.{{ .Field | ToCamelCase}} = {{ .Field | ToCamelCase}};
 		}
 		{{ end }}
 	
@@ -57,7 +57,7 @@ var (
 		public String toString() {
 			return "{{ .StructName }}{" +
 									{{ range .Columns }}
-					"{{ .Field }}=" + {{ .Field }} + ","+
+					"{{ .Field | ToCamelCase }}=" + {{ .Field | ToCamelCase }} + ","+
 									{{ end }}
 					"}";
 		}
