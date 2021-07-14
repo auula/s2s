@@ -28,6 +28,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var commandSymbol = "😃:shell>"
+
 // javaCmd represents the java command
 var javaCmd = &cobra.Command{
 	Use:   "java",
@@ -64,9 +66,10 @@ var javaCmd = &cobra.Command{
 			if len(strings.TrimSpace(t)) <= 0 {
 				continue
 			}
-			ParseInput(strings.Split(t, " ")[0], &Args{
+			strs := strings.Split(t, " ")
+			ParseInput(strs[0], &Args{
 				sts:  structure,
-				args: strings.Split(t, " ")[1:],
+				args: strs,
 			})
 		}
 	},

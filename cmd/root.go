@@ -22,6 +22,7 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -47,7 +48,10 @@ type (
 
 var (
 	Use = func(args *Args) error {
-		args.sts.SetSchema(args.args[0])
+		if len(args.args) == 1 {
+			return errors.New("You do not choose which database, 👉 `use database` ")
+		}
+		args.sts.SetSchema(args.args[1])
 		return nil
 	}
 	Tables = func(args *Args) error {
@@ -101,8 +105,9 @@ func ParseInput(cmd string, args *Args) {
 	case "use":
 		if err := shell[cmd](args); err != nil {
 			emoji.Error(err.Error())
+		} else {
+			emoji.Info(fmt.Sprintf("Selected as database 👉 `%s`！", args.args[1]))
 		}
-		emoji.Info(fmt.Sprintf("Selected as database 👉 `%s`！", args.args[0]))
 	case "clear":
 		clearFunc()
 	case "EXIT":

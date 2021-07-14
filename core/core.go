@@ -22,7 +22,6 @@ import (
 	"io"
 	"strings"
 
-	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/db"
 
 	"github.com/higker/s2s/core/db/mysql"
@@ -87,15 +86,6 @@ func (s *Structure) Parse(wr io.Writer, dbName, tabName string) error {
 		return err
 	}
 	return s.assembly.Parse(wr, tabName, s.assembly.ToField(columns))
-}
-
-func completer(d prompt.Document) []prompt.Suggest {
-	s := []prompt.Suggest{
-		{Text: "tables", Description: "Show tables infomation command."},
-		{Text: "databases", Description: "Show database infomation command."},
-		{Text: "use", Description: "Database of select using."},
-	}
-	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }
 
 func New() *Structure {
