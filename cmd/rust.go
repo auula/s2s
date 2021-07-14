@@ -17,7 +17,14 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
+	"github.com/c-bata/go-prompt"
+	"github.com/higker/s2s/core/app"
+	"github.com/higker/s2s/core/db"
+	"github.com/higker/s2s/core/emoji"
+	"github.com/higker/s2s/core/lang/rust"
 	"github.com/spf13/cobra"
 )
 
@@ -25,14 +32,44 @@ import (
 var rustCmd = &cobra.Command{
 	Use:   "rust",
 	Short: "Generate rust code",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `
+  Produce Rust code mapping according to database table.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("rust called")
+		fmt.Println(app.Info.Banner)
+		fmt.Println()
+		emoji.Success("You have entered the command line mode!")
+
+		structure := rust.New()
+
+		if err := structure.OpenDB(
+			&db.Info{
+				HostIPAndPort: os.Getenv("s2s_host"), // 数据库IP
+				UserName:      os.Getenv("s2s_user"), // 数据库用户名
+				Password:      os.Getenv("s2s_pwd"),  // 数据库密码
+				Type:          db.MySQL,              // 数据库类型 PostgreSQL Oracle
+				Charset:       os.Getenv("s2s_charset"),
+			},
+		); err != nil {
+			emoji.Error("Failed to establish a connection to the database!")
+		}
+
+		defer structure.Close()
+
+		emoji.Success("Press the 'tab' key to get a prompt！")
+		emoji.Success("Enter `exit` to exit the program!")
+		for {
+			fmt.Println()
+			t := prompt.Input(commandSymbol, shellPrompt)
+			if len(strings.TrimSpace(t)) <= 0 {
+				continue
+			}
+
+			ParseInput(strings.Split(t, " ")[0], &Args{
+				sts:  structure,
+				args: strings.Split(t, " "),
+			})
+		}
 	},
 }
 

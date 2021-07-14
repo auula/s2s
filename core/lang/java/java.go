@@ -45,7 +45,7 @@ var (
 	
 		{{ range .Columns }}
 		public {{ .Type }} get{{ .Field | ToCamelCase}}() {
-			return {{ .Field }};
+			return {{ .Field | ToCamelCase }};
 		}
 	
 		public void set{{ .Field | ToCamelCase}}({{ .Type }} {{ .Field | ToCamelCase}}) {
