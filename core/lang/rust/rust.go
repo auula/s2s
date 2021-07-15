@@ -38,7 +38,7 @@ extern crate serde_derive;
 pub struct {{ .StructName | ToCamelCase}} {
 
 	{{ range .Columns }}
-    // {{ .Comment }}
+    {{ .Comment | RemoveEmpty}}
     #[serde(rename = "{{ .Field }}")]
     pub {{ .Field }}: {{ .Type }},
 	{{ end }}
@@ -96,6 +96,7 @@ func (ras *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 		"s2s_rust").Funcs(
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
+			"RemoveEmpty": core.RemoveEmptyFunc,
 		},
 	).Parse(ras.Source))
 

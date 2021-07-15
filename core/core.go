@@ -19,6 +19,7 @@ THE SOFTWARE.
 package core
 
 import (
+	"fmt"
 	"io"
 	"strings"
 
@@ -33,6 +34,12 @@ var (
 		str = strings.Replace(str, "_", " ", -1)
 		str = strings.Title(str)
 		return strings.Replace(str, " ", "", -1)
+	}
+	RemoveEmptyFunc = func(str string) string {
+		if len(str) == 0 {
+			return ""
+		}
+		return fmt.Sprintf("// %s", str)
 	}
 )
 
