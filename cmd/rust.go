@@ -31,7 +31,7 @@ import (
 // rustCmd represents the rust command
 var rustCmd = &cobra.Command{
 	Use:   "rust",
-	Short: "Generate rust code",
+	Short: "Generate Rust code",
 	Long: `
   Produce Rust code mapping according to database table.
 	`,

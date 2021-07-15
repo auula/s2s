@@ -48,9 +48,8 @@ var (
 		return "{{ .StructName | ToCamelCase }}"
 	}
 
-	func ({{ .StructName | ToCamelCase }} *{{ .StructName | ToCamelCase }}) ToJson() string {
-		str,_ := json.Marshal({{ .StructName }})
-		return str
+	func ({{ .StructName}} *{{ .StructName | ToCamelCase }}) ToJson() (string,error) {
+		return json.Marshal({{ .StructName }})
 	}
 `
 )
