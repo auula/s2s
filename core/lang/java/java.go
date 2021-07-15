@@ -20,7 +20,6 @@ package java
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"text/template"
 
@@ -204,8 +203,4 @@ func New() *core.Structure {
 	sts := new(core.Structure)
 	sts.SetLang(NewAssembly())
 	return sts
-}
-
-func ToString() {
-	fmt.Println(string(SourceByte))
 }

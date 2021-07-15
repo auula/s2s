@@ -28,8 +28,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var commandSymbol = "😃:shell>"
-
 // javaCmd represents the java command
 var javaCmd = &cobra.Command{
 	Use:   "java",

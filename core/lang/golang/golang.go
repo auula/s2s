@@ -41,7 +41,7 @@ var (
 	type {{ .StructName | ToCamelCase }} struct {
 		{{ range .Columns }}
 		{{ .Comment | RemoveEmpty}}
-		{{ .Field | ToCamelCase }}	{{ .Type }} {{ .Tag  }}
+		{{ .Field | ToCamelCase}}	{{ .Type }}	{{ .Tag }}
 		{{ end }}
 	}
 

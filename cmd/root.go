@@ -27,6 +27,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 
 	"github.com/apcera/termtables"
 	"github.com/c-bata/go-prompt"
@@ -36,6 +37,8 @@ import (
 
 	"github.com/spf13/cobra"
 )
+
+var commandSymbol = "😃:s2s>"
 
 type Args struct {
 	args []string
@@ -49,6 +52,9 @@ type (
 var (
 	Use = func(args *Args) error {
 		if len(args.args) == 1 {
+			return errors.New("You do not choose which database, 👉 `use database` ")
+		}
+		if len(strings.TrimSpace(args.args[1])) == 0 {
 			return errors.New("You do not choose which database, 👉 `use database` ")
 		}
 		args.sts.SetSchema(args.args[1])
@@ -81,6 +87,12 @@ var (
 		return nil
 	}
 	Generate = func(args *Args) error {
+		if len(args.args) == 1 {
+			return errors.New("You do not choose which table, 👉 `gen table` ")
+		}
+		if len(strings.TrimSpace(args.args[1])) == 0 {
+			return errors.New("You do not choose which table, 👉 `gen table` ")
+		}
 		args.sts.Parse(os.Stdout, args.args[1])
 		return nil
 	}
@@ -126,9 +138,12 @@ func ParseInput(cmd string, args *Args) {
 
 func shellPrompt(d prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
-		{Text: "tables", Description: "Displays the current database of all table names."},
+
 		{Text: "databases", Description: "Displays a list of all the database names."},
+		{Text: "tables", Description: "Displays the current database of all table names."},
 		{Text: "use", Description: "Specify the database name used."},
+		{Text: "gen", Description: "Generate the structure corresponding to the data table."},
+		{Text: "info", Description: "Current database connection information."},
 		{Text: "exit", Description: "Enter `exit` to exit the program."},
 		{Text: "clear", Description: "Content on the clean-up screen."},
 	}
