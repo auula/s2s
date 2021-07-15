@@ -19,7 +19,6 @@ THE SOFTWARE.
 package golang_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/higker/s2s/core/db"
@@ -67,5 +66,5 @@ func TestGoAssembly_ToField(t *testing.T) {
 }
 
 func TestAssembly_Parse(t *testing.T) {
-	structure.Parse(os.Stdout, "tableName", structure.ToField(tcs))
+	golang.ToString()
 }

@@ -96,8 +96,7 @@ func (j *Field) Comment() string {
 
 type Assembly struct {
 	lang.DataType
-	source  string
-	imports []string
+	Source string
 }
 
 func (jas *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
@@ -127,7 +126,7 @@ func (jas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
 		},
-	).Parse(jas.source))
+	).Parse(jas.Source))
 
 	packages := make([]string, 0)
 
@@ -167,7 +166,7 @@ func (jas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 func NewAssembly() *Assembly {
 	var jas Assembly
 	jas.Lang = lang.Java
-	jas.source = SourceByte
+	jas.Source = SourceByte
 	jas.Table = lang.TypeSystem{
 		"int":        "Integer",
 		"tinyint":    "short",

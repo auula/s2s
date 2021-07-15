@@ -67,8 +67,7 @@ func (r *Field) Comment() string {
 
 type Assembly struct {
 	lang.DataType
-	source  []byte
-	comment string
+	Source string
 }
 
 func (ras *Assembly) ToField(tcs []*db.TableColumn) []core.Field {
@@ -98,9 +97,7 @@ func (ras *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
 		},
-	).Parse(string(ras.source)))
-
-	importPkg := make([]string, 0)
+	).Parse(ras.Source))
 
 	type (
 		structure struct {
@@ -111,7 +108,6 @@ func (ras *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 	)
 
 	return tpl.Execute(wr, structure{
-		Pkg:        importPkg,
 		StructName: tabName,
 		Columns:    cs,
 	})
@@ -120,7 +116,7 @@ func (ras *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 func NewAssembly() *Assembly {
 	var jas Assembly
 	jas.Lang = lang.Rust
-	jas.source = []byte(SourceByte)
+	jas.Source = SourceByte
 	jas.Table = lang.TypeSystem{
 		"int":        "i32",
 		"tinyint":    "i8",
