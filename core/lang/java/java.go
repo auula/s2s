@@ -40,6 +40,7 @@ var (
 	public class {{ .StructName | ToCamelCase }} {
 	
 		{{ range .Columns }}
+		{{ .Comment | RemoveEmpty}}
 		private {{ .Type }} {{ .Field | ToCamelCase }};
 		{{ end }}
 	
@@ -125,6 +126,7 @@ func (jas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 		"s2s_java").Funcs(
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
+			"RemoveEmpty": core.RemoveEmptyFunc,
 		},
 	).Parse(jas.Source))
 

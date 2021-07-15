@@ -40,6 +40,7 @@ var (
 
 	type {{ .StructName | ToCamelCase }} struct {
 		{{ range .Columns }}
+		{{ .Comment | RemoveEmpty}}
 		{{ .Field | ToCamelCase }}	{{ .Type }} {{ .Tag  }}
 		{{ end }}
 	}
@@ -106,6 +107,7 @@ func (gas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 	tpl := template.Must(template.New("s2s_golang").Funcs(
 		template.FuncMap{
 			"ToCamelCase": core.CamelCaseFunc,
+			"RemoveEmpty": core.RemoveEmptyFunc,
 		},
 	).Parse(gas.Source))
 
