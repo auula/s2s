@@ -29,7 +29,7 @@ import (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Version igennformation",
+	Short: "Version information",
 	Long: `
   Current application version information
 	`,
