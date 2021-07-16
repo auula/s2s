@@ -33,12 +33,16 @@ import (
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core"
 	"github.com/higker/s2s/core/app"
+	"github.com/higker/s2s/core/db"
 	"github.com/higker/s2s/core/emoji"
 
 	"github.com/spf13/cobra"
 )
 
-var commandSymbol = "😃:s2s>"
+var (
+	commandSymbol  = "😃:s2s>"
+	ConnectionInfo *db.Info
+)
 
 type Args struct {
 	args []string
@@ -96,8 +100,17 @@ var (
 		args.sts.Parse(os.Stdout, args.args[1])
 		return nil
 	}
+	Info = func(args *Args) error {
+		t := termtables.CreateTable()
+		t.AddRow("HOST", ConnectionInfo.HostIPAndPort)
+		t.AddRow("USER", ConnectionInfo.UserName)
+		t.AddRow("TYPE", ConnectionInfo.Type)
+		fmt.Println(t.Render())
+		return nil
+	}
 	shell = map[string]Command{
 		"use":       Use,
+		"info":      Info,
 		"tables":    Tables,
 		"databases": Database,
 		"generate":  Generate,
@@ -124,6 +137,10 @@ func ParseInput(cmd string, args *Args) {
 		if err := shell["generate"](args); err != nil {
 			emoji.Error(err.Error())
 		}
+	case "info":
+		if err := shell["info"](args); err != nil {
+			emoji.Error(err.Error())
+		}
 	case "clear":
 		clearFunc()
 	case "EXIT":
@@ -138,7 +155,6 @@ func ParseInput(cmd string, args *Args) {
 
 func shellPrompt(d prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
-
 		{Text: "databases", Description: "Displays a list of all the database names."},
 		{Text: "tables", Description: "Displays the current database of all table names."},
 		{Text: "use", Description: "Specify the database name used."},
@@ -191,4 +207,14 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
+}
+
+func init() {
+	ConnectionInfo = &db.Info{
+		HostIPAndPort: os.Getenv("s2s_host"), // 数据库IP
+		UserName:      os.Getenv("s2s_user"), // 数据库用户名
+		Password:      os.Getenv("s2s_pwd"),  // 数据库密码
+		Type:          db.MySQL,              // 数据库类型 PostgreSQL Oracle
+		Charset:       os.Getenv("s2s_charset"),
+	}
 }

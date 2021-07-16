@@ -17,12 +17,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/higker/s2s/core/app"
-	"github.com/higker/s2s/core/db"
 	"github.com/higker/s2s/core/emoji"
 	"github.com/higker/s2s/core/lang/golang"
 	"github.com/spf13/cobra"
@@ -43,13 +41,7 @@ var golangCmd = &cobra.Command{
 		structure := golang.New()
 
 		if err := structure.OpenDB(
-			&db.Info{
-				HostIPAndPort: os.Getenv("s2s_host"), // 数据库IP
-				UserName:      os.Getenv("s2s_user"), // 数据库用户名
-				Password:      os.Getenv("s2s_pwd"),  // 数据库密码
-				Type:          db.MySQL,              // 数据库类型 PostgreSQL Oracle
-				Charset:       os.Getenv("s2s_charset"),
-			},
+			ConnectionInfo,
 		); err != nil {
 			emoji.Error("Failed to establish a connection to the database!")
 		}

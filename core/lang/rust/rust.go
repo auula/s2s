@@ -144,6 +144,7 @@ func NewAssembly() *Assembly {
 		"time":       "chrono::NaiveTime",
 		"float":      "f32",
 		"double":     "f64",
+		"decimal":    "f64",
 	}
 	return &jas
 }
