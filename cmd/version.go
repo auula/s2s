@@ -34,10 +34,9 @@ var versionCmd = &cobra.Command{
   Current application version information
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(app.Info.Banner)
 		fmt.Println(fmt.Sprintf("OS: %s ARCH: %s", runtime.GOOS, runtime.GOARCH))
-		fmt.Println(fmt.Sprintf("Source code commit: %s", "57b02f6"))
-		fmt.Println(fmt.Sprintf("Application version: %s", app.Info.Version))
+		fmt.Println(fmt.Sprintf("source code commit: %s", "57b02f6"))
+		fmt.Println(fmt.Sprintf("s2s application version: %s", app.Info.Version))
 	},
 }
 
