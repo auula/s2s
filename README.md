@@ -32,6 +32,8 @@ export s2s_charset="utf8"
 
 ## 内置命令
 
+**PS: 在命令行模式下按下`tab`键会有命令补全提示！**
+
 |  命令   | 使用方法  |
 |  ----  | ----  |
 | databases | 显示所有数据库名 |
@@ -42,6 +44,40 @@ export s2s_charset="utf8"
 | exit  | 退出命令行模式 |
 | clear  | 清理屏幕内容 |
 
+**使用案例**
+
+```bash
+$:> s2s java
+
+	        ______
+	.-----.|__    |.-----.
+	|__ --||    __||__ --|
+	|_____||______||_____|
+
+
+
+🥳: You have entered the command line mode!
+
+🥳: Press the 'tab' key to get a prompt！
+
+🥳: Enter `exit` to exit the program!
+
+😃:s2s>databases
++---+--------------------+
+| * | Database           |
++---+--------------------+
+| 1 | information_schema |
+| 2 | emp_db             |
+| 3 | mysql              |
+| 4 | performance_schema |
+| 5 | sys                |
+| 6 | test_db            |
++---+--------------------+
+
+
+😃:s2s>
+
+```
 
 ## 导入包
 
