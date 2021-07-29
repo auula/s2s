@@ -32,7 +32,7 @@ export s2s_charset="utf8"
 
 | 平台       | 地址   |
 | ---------- | ------ |
-| windows-x64 | [s2s-windows-x64.zip](https://github.com/higker/s2s/releases/download/v0.0.1/s2s-windows-x64.zip) |
+| Windows-x64 | [s2s-windows-x64.zip](https://github.com/higker/s2s/releases/download/v0.0.1/s2s-windows-x64.zip) |
 | Mac-x64     | [s2s-darwin-x64.zip](https://github.com/higker/s2s/releases/download/v0.0.1/s2s-darwin-x64.zip) |
 | Linux-64     | [s2s-linux-x64.zip](https://github.com/higker/s2s/releases/download/v0.0.1/s2s-linux-x64.zip) |
 
