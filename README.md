@@ -111,7 +111,7 @@ $:> s2s java
 		private Timestamp CreateTime;
 
 		// 用户更新时间
-		private Timestamp UpdatedData;
+		private Timestamp UpdatedDate;
 
 		// 用户年龄
 		private short Age;
@@ -140,12 +140,12 @@ $:> s2s java
 			this.CreateTime = CreateTime;
 		}
 
-		public Timestamp getUpdatedData() {
-			return UpdatedData;
+		public Timestamp getUpdatedDate() {
+			return UpdatedDate;
 		}
 
-		public void setUpdatedData(Timestamp UpdatedData) {
-			this.UpdatedData = UpdatedData;
+		public void setUpdatedDate(Timestamp UpdatedDate) {
+			this.UpdatedDate = UpdatedDate;
 		}
 
 		public short getAge() {
