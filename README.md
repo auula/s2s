@@ -1,5 +1,4 @@
 # s2s
-[![codecov](https://codecov.io/gh/higker/s2s/branch/master/graph/badge.svg?token=btbed5BUUZ)](https://codecov.io/gh/higker/s2s)
 [![DeepSource](https://deepsource.io/gh/higker/s2s.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/higker/s2s/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/higker/s2s.svg/?label=resolved+issues&show_trend=true)](https://deepsource.io/gh/higker/s2s/?ref=repository-badge)
 [![License](https://img.shields.io/badge/license-MIT-db5149.svg)](https://github.com/higker/sessionx/blob/master/LICENSE)
