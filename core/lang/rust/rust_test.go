@@ -14,7 +14,7 @@ import (
 
 var (
 	structure = rust.NewAssembly()
-	tcs       = make([]*db.TableColumn, 3, 3)
+	tcs       = make([]*db.TableColumn, 3)
 )
 
 func TestMain(m *testing.M) {
