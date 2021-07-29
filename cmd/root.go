@@ -55,7 +55,7 @@ var (
 		if len(args.args) == 1 {
 			return errors.New("You do not choose which database, 👉 `use database` ")
 		}
-		if len(strings.TrimSpace(args.args[1])) == 0 {
+		if strings.TrimSpace(args.args[1]) == "" {
 			return errors.New("You do not choose which database, 👉 `use database` ")
 		}
 		args.sts.SetSchema(args.args[1])
@@ -91,7 +91,7 @@ var (
 		if len(args.args) == 1 {
 			return errors.New("You do not choose which table, 👉 `gen table` ")
 		}
-		if len(strings.TrimSpace(args.args[1])) == 0 {
+		if strings.TrimSpace(args.args[1]) == "" {
 			return errors.New("You do not choose which table, 👉 `gen table` ")
 		}
 		args.sts.Parse(os.Stdout, args.args[1])

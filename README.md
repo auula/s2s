@@ -1,4 +1,8 @@
 # s2s
+[![DeepSource](https://deepsource.io/gh/higker/s2s.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/higker/s2s/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gh/higker/s2s.svg/?label=resolved+issues&show_trend=true)](https://deepsource.io/gh/higker/s2s/?ref=repository-badge)
+[![License](https://img.shields.io/badge/license-MIT-db5149.svg)](https://github.com/higker/sessionx/blob/master/LICENSE)
+[![Go Reference](https://pkg.go.dev/badge/github.com/higker/s2s.svg)](https://pkg.go.dev/github.com/higker/s2s)
 
 ## 什么是`s2s`？
 `s2s (sql to structure)`是一款命令行数据库逆向工程工具，它可以通过数据库表生成对应的`Java`、`Go`、`Rust`结构体（`class`），后面将陆续支持更多的语言。
@@ -28,8 +32,10 @@ export s2s_charset="utf8"
 
 | 平台       | 地址   |
 | ---------- | ------ |
-| windows-64 | 单元格 |
-| Mac-64     | 单元格 |
+| Windows-x64 | [s2s-windows-x64.zip](https://github.com/higker/s2s/releases/download/v0.0.1/s2s-windows-x64.zip) |
+| Mac-x64     | [s2s-darwin-x64.zip](https://github.com/higker/s2s/releases/download/v0.0.1/s2s-darwin-x64.zip) |
+| Linux-64     | [s2s-linux-x64.zip](https://github.com/higker/s2s/releases/download/v0.0.1/s2s-linux-x64.zip) |
+
 
 
 ## 内置命令

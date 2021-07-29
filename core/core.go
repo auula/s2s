@@ -36,7 +36,7 @@ var (
 		return strings.Replace(str, " ", "", -1)
 	}
 	RemoveEmptyFunc = func(str string) string {
-		if len(str) == 0 {
+		if str == "" {
 			return ""
 		}
 		return fmt.Sprintf("// %s", str)
