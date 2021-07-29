@@ -34,23 +34,18 @@ var (
 	SourceByte = `
 	package model
 	
+	{{ if .Pkg }}
 	import (
-		"encoding/json"
+		{{ range .Pkg }}
+		"{{ . }}"
+		{{ end }}
 	)
-
+	{{ end }}
 	type {{ .StructName | ToCamelCase }} struct {
 		{{ range .Columns }}
 		{{ .Comment | RemoveEmpty}}
-		{{ .Field | ToCamelCase}}	{{ .Type }}	{{ .Tag }}
+		{{ .Field | ToCamelCase}} {{ .Type }} {{ .Tag }}
 		{{ end }}
-	}
-
-	func ({{ .StructName }} *{{ .StructName | ToCamelCase }}) TableName() string {
-		return "{{ .StructName | ToCamelCase }}"
-	}
-
-	func ({{ .StructName}} *{{ .StructName | ToCamelCase }}) ToJson() (string,error) {
-		return json.Marshal({{ .StructName }})
 	}
 `
 )
@@ -76,6 +71,11 @@ func (gf *Field) Comment() string {
 
 func (gf *Field) Tag() string {
 	return gf.tag
+}
+
+var Imports = map[string]string{
+	"time.Time":       "time",
+	"decimal.Decimal": "github.com/shopspring/decimal",
 }
 
 type Assembly struct {
@@ -111,14 +111,36 @@ func (gas *Assembly) Parse(wr io.Writer, tabName string, cs []core.Field) error 
 		},
 	).Parse(gas.Source))
 
+	packages := make([]string, 0)
+
+	// 自动导包优化
+	isContain := func(str string, slice []string) bool {
+		for _, v := range packages {
+			if v == str {
+				return true
+			}
+		}
+		return false
+	}
+
+	for _, field := range cs {
+		if pkg, ok := Imports[field.Type()]; ok {
+			if !isContain(pkg, packages) {
+				packages = append(packages, pkg)
+			}
+		}
+	}
+
 	type (
 		structure struct {
+			Pkg        []string
 			StructName string
 			Columns    []core.Field
 		}
 	)
 
 	return tpl.Execute(wr, structure{
+		Pkg:        packages,
 		StructName: tabName,
 		Columns:    cs,
 	})
@@ -154,6 +176,7 @@ func NewAssembly() *Assembly {
 		"time":       "time.Time",
 		"float":      "float64",
 		"double":     "float64",
+		"decimal":    "decimal.Decimal",
 	}
 	return &gas
 }
@@ -162,8 +185,4 @@ func New() *core.Structure {
 	sts := new(core.Structure)
 	sts.SetLang(NewAssembly())
 	return sts
-}
-
-func ToString() {
-	fmt.Println(string(SourceByte))
 }
