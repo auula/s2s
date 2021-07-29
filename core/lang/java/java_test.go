@@ -19,16 +19,17 @@ THE SOFTWARE.
 package java_test
 
 import (
-	"github.com/higker/s2s/core/lang/java"
 	"os"
 	"testing"
+
+	"github.com/higker/s2s/core/lang/java"
 
 	"github.com/higker/s2s/core/db"
 )
 
 var (
 	structure = java.NewAssembly()
-	tcs       = make([]*db.TableColumn, 3, 3)
+	tcs       = make([]*db.TableColumn, 3)
 )
 
 func TestMain(m *testing.M) {
