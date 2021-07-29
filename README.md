@@ -44,7 +44,10 @@ go get -u github.com/higker/s2s
 ```go
 package main
 
-import "github.com/higker/s2s/core/lang/java"
+import (
+	"github.com/higker/s2s/core/lang/java"
+	"github.com/higker/s2s/core/db"
+)
 
 
 func main() {
