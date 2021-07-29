@@ -75,8 +75,125 @@ $:> s2s java
 +---+--------------------+
 
 
-😃:s2s>
+😃:s2s>use emp_db
 
+🤖‍: Selected as database 👉 `emp_db`！
+
+😃:s2s>tables
++---+-----------+
+| * | Tables    |
++---+-----------+
+| 1 | user_info |
++---+-----------+
+
+
+😃:s2s>gen user_info
+
+	package model
+
+
+	import java.sql.Timestamp;
+
+	import java.math.BigDecimal;
+
+	import java.math.BigInteger;
+
+
+	public class UserInfo {
+
+
+		// 用户账号
+		private String Account;
+
+		// 用户创建时间
+		private Timestamp CreateTime;
+
+		// 用户更新时间
+		private Timestamp UpdatedData;
+
+		// 用户年龄
+		private short Age;
+
+		// 用户余额
+		private BigDecimal Money;
+
+		// 用户ID
+		private BigInteger Uid;
+
+
+
+		public String getAccount() {
+			return Account;
+		}
+
+		public void setAccount(String Account) {
+			this.Account = Account;
+		}
+
+		public Timestamp getCreateTime() {
+			return CreateTime;
+		}
+
+		public void setCreateTime(Timestamp CreateTime) {
+			this.CreateTime = CreateTime;
+		}
+
+		public Timestamp getUpdatedData() {
+			return UpdatedData;
+		}
+
+		public void setUpdatedData(Timestamp UpdatedData) {
+			this.UpdatedData = UpdatedData;
+		}
+
+		public short getAge() {
+			return Age;
+		}
+
+		public void setAge(short Age) {
+			this.Age = Age;
+		}
+
+		public BigDecimal getMoney() {
+			return Money;
+		}
+
+		public void setMoney(BigDecimal Money) {
+			this.Money = Money;
+		}
+
+		public BigInteger getUid() {
+			return Uid;
+		}
+
+		public void setUid(BigInteger Uid) {
+			this.Uid = Uid;
+		}
+
+
+		@Override
+		public String toString() {
+			return "user_info{" +
+
+					"Account=" + Account + ","+
+
+					"CreateTime=" + CreateTime + ","+
+
+					"UpdatedData=" + UpdatedData + ","+
+
+					"Age=" + Age + ","+
+
+					"Money=" + Money + ","+
+
+					"Uid=" + Uid + ","+
+
+					"}";
+		}
+	}
+
+😃:s2s>exit
+
+🤖‍: Bye👋 :)
 ```
 
 ## 导入包
