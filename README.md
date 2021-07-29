@@ -181,7 +181,7 @@ $:> s2s java
 
 					"CreateTime=" + CreateTime + ","+
 
-					"UpdatedData=" + UpdatedData + ","+
+					"UpdatedData=" + UpdatedDate + ","+
 
 					"Age=" + Age + ","+
 
